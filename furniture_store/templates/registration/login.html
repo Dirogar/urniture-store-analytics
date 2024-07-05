@@ -1,6 +1,7 @@
-{% extends "base.html" %}
+{% extends "base_auth.html" %}
 {% load django_bootstrap5 %}
 {% block content %}
+{% load static %}
   {% if next %}
     {% if user.is_authenticated %}
       <p class="text-center">
@@ -15,6 +16,9 @@
       </p>
     {% endif %}
   {% endif %}
+    <div  class="col d-flex justify-content-center mb-5">
+        <img src="{% static 'img/logo.svg' %}" width="328" height="50" class="d-inline-block align-top" alt="">
+    </div>
   <div class="col d-flex justify-content-center">
     <div class="card" style="width: 40rem;">
       <div class="card-header">
@@ -25,7 +29,9 @@
           {% csrf_token %}
           {% bootstrap_form form %}
           <input type="hidden" name="next" value="{{ next }}">
-          {% bootstrap_button button_type="submit" content="Войти" %}
+          <div class="d-flex justify-content-center">
+            {% bootstrap_button button_type="submit" content="Войти" %}
+          </div>
         </form>
         <div>
           <a href="{% url 'password_reset' %}">Забыли пароль?</a>
