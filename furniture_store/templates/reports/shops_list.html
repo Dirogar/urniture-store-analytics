@@ -4,5 +4,83 @@ WAU
 {% endblock %}
 
 {% block content %}
- <h1> Тут будет таблица </h1>
+    <div class="container mt-4">
+        <h1>Магазины</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Название магазина</th>
+                    <th>Площадь магазина</th>
+                    <th>Планируется выставить товара</th>
+                    <th>Факт выставленного товара</th>
+                    <th>Отклонение</th>
+                    <th>Комментарии</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for shop in shops %}
+                <tr>
+                    <td>{{ shop.name }}</td>
+                    <td>{{ shop.area }}</td>
+                    <td>{{ shop.plan }}</td>
+                    <td>{{ shop.fact }}</td>
+                    <td>{{ shop.deviation }}</td>
+                    <td>
+                        <ul>
+                            {% for comment in shop.comment_set.all %}
+                                <li id="comment-{{ comment.id }}">
+                                    <span class="comment-text">{{ comment.text }}</span>
+                                    {% if comment.author == user %}
+                                        <a href="#" class="edit-comment" data-comment-id="{{ comment.id }}">Редактировать</a>
+                                        <form class="edit-comment-form d-none" method="post" data-comment-id="{{ comment.id }}">
+                                            {% csrf_token %}
+                                            <textarea name="text" class="form-control">{{ comment.text }}</textarea>
+                                            <button type="submit" class="btn btn-primary btn-sm mt-2">Сохранить</button>
+                                        </form>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        <form method="post" action="{% url 'reports:index' %}">
+                            {% csrf_token %}
+                            {{ comment_form.as_p }}
+                            <input type="hidden" name="shop_id" value="{{ shop.id }}">
+                            <button type="submit" class="btn btn-primary btn-sm mt-2">Добавить комментарий</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.edit-comment').click(function(e) {
+                e.preventDefault();
+                var commentId = $(this).data('comment-id');
+                $('#comment-' + commentId + ' .comment-text').toggleClass('d-none');
+                $('#comment-' + commentId + ' .edit-comment-form').toggleClass('d-none');
+            });
+
+            $('.edit-comment-form').submit(function(e) {
+                e.preventDefault();
+                var commentId = $(this).data('comment-id');
+                var form = $(this);
+                $.ajax({
+                    url: "{% url 'reports:comment_edit' 0 %}".replace('0', commentId),
+                    method: "POST",
+                    data: form.serialize(),
+                    success: function(response) {
+                        $('#comment-' + commentId + ' .comment-text').text(response.comment_text).removeClass('d-none');
+                        form.toggleClass('d-none');
+                    },
+                    error: function(response) {
+                        alert("Error updating comment");
+                    }
+                });
+            });
+        });
+    </script>
 {% endblock %}
