@@ -1,6 +1,10 @@
-from django.shortcuts import render
+from django.views.generic import (
+    ListView, CreateView, UpdateView, DeleteView, DetailView
+)
+from .models import Shops
 
-# Create your views here.
 
-def main_page():
-    ...
+class MainPage(ListView):
+    model = Shops
+    template_name = 'reports/shop_list.html'
+
