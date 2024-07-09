@@ -6,6 +6,64 @@ User = get_user_model()
 
 DEFAULT_AREA = 0
 
+class products(models.Model):
+    article = models.CharField(
+        max_length=9,
+        null=False,
+        verbose_name='Артикул'
+    )
+    name = models.CharField(
+        max_length=254,
+        null=False,
+        verbose_name='Номенклатура'
+    )
+    model = models.CharField(
+        max_length=254,
+        null=True,
+        verbose_name='Модель'
+    )
+    manufacturer = models.CharField(
+        max_length=254,
+        null=True,
+        verbose_name='Производитель'
+    )
+    squere = models.FloatField(
+        null=True,
+        verbose_name='Площадь номенклатуры'
+    )
+    category = models.CharField(
+        max_length=254,
+        null=True,
+        verbose_name='Категория'
+    )
+    segment = models.CharField(
+        max_length=254,
+        null=True,
+        verbose_name='Сегмент'
+    )
+    matrix = models.CharField(
+        max_length=254,
+        null=True,
+        verbose_name='Матрица'
+    )
+
+
+class Warehouses(models.Model):
+    name = models.CharField(
+        max_length=254,
+        null=False,
+        verbose_name='Склад'
+    )
+    warehouse_remains = models.IntegerField(
+        null=True,
+        verbose_name='Остатки склада'
+    )
+    product = models.ManyToManyField(
+        null=True,
+        related_name='Товар'
+    )
+
+
 
 class Shops(models.Model):
     name = models.CharField(
