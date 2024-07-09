@@ -4,10 +4,11 @@ from django.views.generic import (
 from http import HTTPStatus
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import redirect, get_object_or_404
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.http import JsonResponse
+from django.views.generic.detail import SingleObjectMixin
 
-from .models import Shops, Comment
+from .models import Shops, Comment, User
 from .forms import CommentForm
 
 
@@ -32,21 +33,35 @@ class MainPage(LoginRequiredMixin, ListView):
             return redirect(reverse('reports:index'))
         return self.get(request, *args, **kwargs)
 
+    def get_queryset(self):
+        return Shops.objects.filter(members=self.request.user)
 
-class EditCommentView(LoginRequiredMixin, UserPassesTestMixin, View):
-    def post(self, request, *args, **kwargs):
-        comment = get_object_or_404(Comment, pk=kwargs['pk'])
-        if comment.author != request.user:
-            return JsonResponse({'error': 'Permission denied'},
-                                status=HTTPStatus.FORBIDDEN)
-        form = CommentForm(request.POST, instance=comment)
-        if form.is_valid():
-            form.save()
-            return JsonResponse({'success': 'Comment updated',
-                                 'comment_text': comment.text})
-        return JsonResponse({'error': 'Form is invalid'},
-                            status=HTTPStatus.BAD_REQUEST)
+
+class EditCommentView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    form_class = CommentForm
+    model = Comment
 
     def test_func(self):
         comment = self.get_object()
         return self.request.user == comment.author
+
+    def form_valid(self, form):
+        self.object = form.save()
+        return JsonResponse({'comment_text': self.object.text})
+
+    def form_invalid(self, form):
+        return JsonResponse({'error': form.errors},
+                            status=HTTPStatus.BAD_REQUEST)
+
+
+class DeleteCommentView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Comment
+    success_url = reverse_lazy('reports:index')
+    def test_func(self):
+        comment = self.get_object()
+        return self.request.user == comment.author
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.delete()
+        return JsonResponse({'success': True})

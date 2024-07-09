@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AbstractUser
 
 User = get_user_model()
 
@@ -25,6 +26,7 @@ class Shops(models.Model):
         verbose_name='Факт выставленного товара'
     )
     deviation = models.IntegerField(null=True, verbose_name='Отклонение')
+    members = models.ManyToManyField(User, related_name='shops')
 
     class Meta:
         verbose_name = 'Мебельный салон'
@@ -44,3 +46,5 @@ class Comment(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
+
+
