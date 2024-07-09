@@ -28,6 +28,7 @@ WAU
                 <td>
                     <ul>
                         {% for comment in shop.comment_set.all %}
+                        <strong class="font-weight-bold" style="font-size: 1.3em;">{{ comment.author }}:</strong>
                         <li id="comment-{{ comment.id }}">
                             <span class="comment-text">{{ comment.text }}</span>
                             {% if comment.author == user %}
