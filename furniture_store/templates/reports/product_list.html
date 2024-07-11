@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}
+WAU
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Артикул</th>
+                <th>Номенклатура</th>
+                <th>Модель</th>
+                <th>Производитель</th>
+                <th>Площадь номенклатуры</th>
+                <th>Категория</th>
+                <th>Сегмент</th>
+                <th>Матрица</th>
+                <th>Магазины</th>
+                <th>Площадь</th>
+                <th>Отклонение</th>
+                <th>Факт</th>
+                <th>План</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.article }}</td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.model }}</td>
+                <td>{{ product.manufacturer }}</td>
+                <td>{{ product.square }}</td>
+                <td>{{ product.category }}</td>
+                <td>{{ product.segment }}</td>
+                <td>{{ product.matrix }}</td>
+                {% for shop in product.shops.all %}
+                <td>{{ shop.name }}</td>
+                <td>{{ shop.area }}</td>
+                <td>{{ shop.deviation }}</td>
+                <td>{{ shop.fact }}</td>
+                <td>{{ shop.plan }}</td>
+                {% endfor %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

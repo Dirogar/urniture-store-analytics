@@ -8,12 +8,12 @@ from django.urls import reverse, reverse_lazy
 from django.http import JsonResponse
 from django.views.generic.detail import SingleObjectMixin
 
-from .models import Shops, Comment, User
+from .models import Shop, Comment, User, Product
 from .forms import CommentForm
 
 
 class MainPage(LoginRequiredMixin, ListView):
-    model = Shops
+    model = Shop
     template_name = 'reports/shop_list.html'
     redirect_field_name = 'redirect_to'
     context_object_name = 'shops'
@@ -34,22 +34,37 @@ class MainPage(LoginRequiredMixin, ListView):
         return self.get(request, *args, **kwargs)
 
     def get_queryset(self):
-        return Shops.objects.filter(members=self.request.user)
+        return Shop.objects.filter(members=self.request.user)
+
+
+class ShopProductListView(LoginRequiredMixin, ListView):
+    """Отображает таблицу с данными"""
+    template_name = 'reports/product_list.html'
+    context_object_name = 'products'
+
+    def get_queryset(self):
+        """Добавляет к товарам связанные таблицы"""
+        shops = Product.objects.prefetch_related('shops').all()
+        return shops
 
 
 class EditCommentView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    """Позволяет обновлять комментарии"""
     form_class = CommentForm
     model = Comment
 
     def test_func(self):
+        """Проверяет что пользователь автор коммента"""
         comment = self.get_object()
         return self.request.user == comment.author
 
     def form_valid(self, form):
+        """Валидирует форму и сохраняет значение"""
         self.object = form.save()
         return JsonResponse({'comment_text': self.object.text})
 
     def form_invalid(self, form):
+        """Возвращает ошибку при невалидности"""
         return JsonResponse({'error': form.errors},
                             status=HTTPStatus.BAD_REQUEST)
 
