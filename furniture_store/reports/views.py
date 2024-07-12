@@ -8,12 +8,12 @@ from django.urls import reverse, reverse_lazy
 from django.http import JsonResponse
 from django.views.generic.detail import SingleObjectMixin
 
-from .models import Shop, Comment, User, Product
+from .models import Store, Comment, User, Product
 from .forms import CommentForm
 
 
 class MainPage(LoginRequiredMixin, ListView):
-    model = Shop
+    model = Store
     template_name = 'reports/shop_list.html'
     redirect_field_name = 'redirect_to'
     context_object_name = 'shops'
@@ -41,10 +41,10 @@ class ShopProductListView(LoginRequiredMixin, ListView):
     """Отображает таблицу с данными"""
     template_name = 'reports/product_list.html'
     context_object_name = 'products'
+    model = Product
 
     def get_queryset(self):
-        """Добавляет к товарам связанные таблицы"""
-        shops = Product.objects.prefetch_related('shops').all()
+        shops = Product.objects.prefetch_related('warehouseproduct_set', 'storeproduct_set').all()
         return shops
 
 

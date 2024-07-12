@@ -6,7 +6,22 @@ User = get_user_model()
 
 DEFAULT_AREA = 0
 
-class Shop(models.Model):
+class Warehouse(models.Model):
+    name = models.CharField(
+        max_length=254,
+        null=False,
+        verbose_name='Склад'
+    )
+
+    class Meta:
+        verbose_name = 'Склад'
+        verbose_name_plural = 'Склады'
+
+    def __str__(self):
+        return self.name
+
+
+class Store(models.Model):
     name = models.CharField(
         max_length=254,
         null=False,
@@ -16,19 +31,18 @@ class Shop(models.Model):
         null=False,
         verbose_name='Площадь магазина',
         default=DEFAULT_AREA)
-    plan = models.IntegerField(
-        null=True,
-        verbose_name='Планируется выставить товара'
+    warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE)
+    users = models.ManyToManyField(
+        User, related_name='stores',
+        blank=True,
+        verbose_name='Пользователи'
     )
-    fact = models.IntegerField(
-        null=True,
-        verbose_name='Факт выставленного товара'
-    )
-    deviation = models.IntegerField(null=True, verbose_name='Отклонение')
-    members = models.ManyToManyField(User, related_name='Магазины')
+
+
 
 class Product(models.Model):
     article = models.CharField(
+        primary_key=True,
         max_length=9,
         null=False,
         verbose_name='Артикул'
@@ -67,7 +81,6 @@ class Product(models.Model):
         null=True,
         verbose_name='Матрица'
     )
-    shops = models.ManyToManyField(Shop, related_name='shops')
 
     class Meta:
         verbose_name = 'Товар'
@@ -77,46 +90,55 @@ class Product(models.Model):
         return self.name
 
 
-class Warehouse(models.Model):
-    name = models.CharField(
-        max_length=254,
-        null=False,
-        verbose_name='Склад'
-    )
-    warehouse_remains = models.IntegerField(
-        null=True,
-        verbose_name='Остатки склада'
-    )
-    product = models.ManyToManyField(
+class WarehouseProduct(models.Model):
+    product = models.ForeignKey(
         Product,
-        related_name='Товар'
+        to_field='article',
+        on_delete=models.CASCADE
     )
+    warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE)
+    stock = models.IntegerField(null=False, default=0, verbose_name='Остаток')
 
-    class Meta:
-        verbose_name = 'Склад'
-        verbose_name_plural = 'Склады'
+
+class StoreProduct(models.Model):
+    store = models.ForeignKey(Store, on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+        to_field='article'
+    )
+    general_plan_exhibition = models.IntegerField(null=True, blank=True)
+    plan_exhibition = models.IntegerField(
+        null=True,
+        blank=True,
+        verbose_name='План выставки'
+    )
+    fact_exhibition = models.IntegerField(
+        null=True,
+        blank=True,
+        verbose_name='Факт выставки'
+    )
 
     def __str__(self):
-        return self.name
-
+        return f'{self.product.name} - {self.store.name}'
 
     class Meta:
         verbose_name = 'Мебельный салон'
         verbose_name_plural = 'Мебельные салоны'
 
-    def __str__(self):
-        return self.name
-
 
 class Comment(models.Model):
     text = models.TextField(verbose_name='Комментарий')
+    created_at = models.DateTimeField(auto_now_add=True)
+    finish_planned_date = models.DateTimeField()
     product = models.ForeignKey(
         Product,
+        to_field='article',
         on_delete=models.CASCADE,
         verbose_name='Товар',
         null=True
     )
-    created_at = models.DateTimeField(auto_now_add=True)
+    store = models.ForeignKey(Store, on_delete=models.CASCADE, null=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
@@ -124,4 +146,4 @@ class Comment(models.Model):
         verbose_name_plural = 'Комментарии'
 
     def __str__(self):
-        return self.name
+        return self.text
