@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import MainPage, EditCommentView, DeleteCommentView, ShopProductListView
+from .views import EditCommentView, DeleteCommentView, ShopProductListView
 
 app_name = 'reports'
 

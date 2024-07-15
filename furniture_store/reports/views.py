@@ -12,30 +12,6 @@ from .models import Store, Comment, User, Product, Warehouse
 from .forms import CommentForm
 
 
-class MainPage(LoginRequiredMixin, ListView):
-    model = Store
-    template_name = 'reports/shop_list.html'
-    redirect_field_name = 'redirect_to'
-    context_object_name = 'shops'
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['comment_form'] = CommentForm()
-        return context
-
-    def post(self, request, *args, **kwargs):
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.author = request.user
-            comment.shop_id = request.POST.get('shop_id')
-            comment.save()
-            return redirect(reverse('reports:index'))
-        return self.get(request, *args, **kwargs)
-
-    def get_queryset(self):
-        return Shop.objects.filter(members=self.request.user)
-
 
 class ShopProductListView(LoginRequiredMixin, ListView):
     """Отображает таблицу с данными"""
