@@ -13,7 +13,7 @@
         <tr class="table-light sticky-header">
             <th colspan="11"></th>
             {% for store in stores %}
-            <th colspan="3">{{ store.name }}</th>
+            <th colspan="6">{{ store.name }}</th>
             {% endfor %}
         </tr>
         <tr class="sub-header">
@@ -32,6 +32,9 @@
             <th>План</th>
             <th>Факт</th>
             <th>Отклонение</th>
+            <th>Площадь</th>
+            <th>Комментарий РАМ/РМ</th>
+            <th>Комментарий СС/АМ</th>
             {% endfor %}
         </tr>
     </thead>
@@ -56,6 +59,18 @@
                 {% endif %}
             </td>
             {% endwith %}
+            {% endfor %}
+            {% for store in stores %}
+            {% with exhibition=store_data|get_item:product.article|get_item:store.id %}
+            <td>{{ exhibition.plan_exhibition|default_if_none:"0" }}</td>
+            <td>{{ exhibition.fact_exhibition|default_if_none:"0"  }}</td>
+            <td>{{ exhibition.deviation|default_if_none:"0"  }}</td>
+            {% endwith %}
+            {% with doubled_quare=product.square|square %}
+            <td>{{ doubled_quare }}</td>
+            {% endwith %}
+            <td>Комментарий РМ</td>
+            <td>Комментарий СС</td>
             {% endfor %}
         </tr>
     {% endfor %}
