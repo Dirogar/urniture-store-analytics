@@ -8,7 +8,7 @@ from django.urls import reverse, reverse_lazy
 from django.http import JsonResponse
 from django.views.generic.detail import SingleObjectMixin
 
-from .models import Store, Comment, User, Product
+from .models import Store, Comment, User, Product, Warehouse
 from .forms import CommentForm
 
 
@@ -39,17 +39,36 @@ class MainPage(LoginRequiredMixin, ListView):
 
 class ShopProductListView(LoginRequiredMixin, ListView):
     """Отображает таблицу с данными"""
-    template_name = 'reports/product_list.html'
+    template_name = 'reports/product_list2.html'
     context_object_name = 'products'
     model = Product
 
     def get_queryset(self):
-        shops = Product.objects.prefetch_related('warehouseproduct_set', 'storeproduct_set').all()
-        return shops
+        """Возвращает связанные данные"""
+        return Product.objects.prefetch_related(
+            'warehouseproduct_set', 'storeproduct_set'
+        ).all()
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['stores'] = Store.objects.all()
+        context['warehouses'] = Warehouse.objects.all()
+
+        warehouse_data = {}
+        store_data = {}
+
+        for product in context['products']:
+            warehouse_data[product.article] = {wp.warehouse_id: wp.stock for wp in product.warehouseproduct_set.all()}
+            store_data[product.article] = {sp.store_id: sp for sp in product.storeproduct_set.all()}
+
+        context['warehouse_data'] = warehouse_data
+        context['store_data'] = store_data
+
+        return context
 
 
 class EditCommentView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    """Позволяет обновлять комментарии"""
+    """Обновляет комментарий"""
     form_class = CommentForm
     model = Comment
 

@@ -16,12 +16,14 @@ WAU
                 <th>Категория</th>
                 <th>Сегмент</th>
                 <th>Матрица</th>
-                <th>Магазины</th>
-                <th>Площадь</th>
-                <th>Отклонение</th>
-                <th>Факт</th>
-                <th>План</th>
-            </tr>
+                <th>Остатки на складах</th>
+                {% for product in products %}
+                    {% for store_product in product.storeproduct_set.all %}
+                    <th>План {{ store_product.store.name }}</th>
+                    <th>Факт</th>
+                    <th>Отклонение</th>
+                    {% endfor %}
+                {% endfor %}
         </thead>
         <tbody>
             {% for product in products %}
@@ -34,14 +36,15 @@ WAU
                 <td>{{ product.category }}</td>
                 <td>{{ product.segment }}</td>
                 <td>{{ product.matrix }}</td>
-                {% for shop in product.shops.all %}
-                <td>{{ shop.name }}</td>
-                <td>{{ shop.area }}</td>
-                <td>{{ shop.deviation }}</td>
-                <td>{{ shop.fact }}</td>
-                <td>{{ shop.plan }}</td>
+                <td>{% for warehouse_product in product.warehouseproduct_set.all %}
+                {{ warehouse_product.warehouse.name }}: {{ warehouse_product.stock }}<br><hr>
                 {% endfor %}
                 </td>
+                {% for store_product in product.storeproduct_set.all %}
+                <td>{{ store_product.plan_exhibition }}</td>
+                <td>{{ store_product.fact_exhibition }}</td>
+                <td>{{ store_product.deviation }}</td>
+                {% endfor%}
             </tr>
             {% endfor %}
         </tbody>

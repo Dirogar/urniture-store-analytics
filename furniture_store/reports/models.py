@@ -27,17 +27,18 @@ class Store(models.Model):
         null=False,
         verbose_name='Название магазина'
     )
-    area = models.FloatField(
-        null=False,
-        verbose_name='Площадь магазина',
-        default=DEFAULT_AREA)
-    warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE)
     users = models.ManyToManyField(
         User, related_name='stores',
         blank=True,
         verbose_name='Пользователи'
     )
 
+    class Meta:
+        verbose_name = 'Магазин'
+        verbose_name_plural = 'Магазины'
+
+    def __str__(self):
+        return self.name
 
 
 class Product(models.Model):
@@ -99,6 +100,9 @@ class WarehouseProduct(models.Model):
     warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE)
     stock = models.IntegerField(null=False, default=0, verbose_name='Остаток')
 
+    class Meta:
+        unique_together = (('warehouse', 'product'),)
+
 
 class StoreProduct(models.Model):
     store = models.ForeignKey(Store, on_delete=models.CASCADE)
@@ -107,22 +111,31 @@ class StoreProduct(models.Model):
         on_delete=models.CASCADE,
         to_field='article'
     )
-    general_plan_exhibition = models.IntegerField(null=True, blank=True)
     plan_exhibition = models.IntegerField(
-        null=True,
-        blank=True,
+        null=False,
+        blank=False,
+        default=0,
         verbose_name='План выставки'
     )
     fact_exhibition = models.IntegerField(
-        null=True,
-        blank=True,
+        null=False,
+        blank=False,
+        default=0,
         verbose_name='Факт выставки'
+    )
+    deviation = models.IntegerField(
+        null=False,
+        blank=False,
+        default=0,
+        verbose_name='Отклонение'
+
     )
 
     def __str__(self):
         return f'{self.product.name} - {self.store.name}'
 
     class Meta:
+        unique_together = (('store', 'product'),)
         verbose_name = 'Мебельный салон'
         verbose_name_plural = 'Мебельные салоны'
 
@@ -147,3 +160,6 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.text
+
+class RoomClass(models.Model):
+    ...
