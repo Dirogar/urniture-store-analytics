@@ -44,6 +44,13 @@ class Store(models.Model):
 class RoomClass(models.Model):
     name = models.CharField(max_length=5, unique=True)
 
+    class Meta:
+        verbose_name = 'Класс комнаты'
+        verbose_name_plural = 'Классы комнат'
+
+    def __str__(self):
+        return self.name
+
 
 class Product(models.Model):
     article = models.CharField(

@@ -24,10 +24,10 @@
             <th>Модель</th>
             <th>Производитель</th>
             <th>Площадь номенклатуры</th>
-            <th>Категория</th>
+            <th><a href="?sort=category&order={% if current_sort == 'category' and current_order == 'asc' %}desc{% else %}asc{% endif %}">Категория</a></th>
             <th>Сегмент</th>
             <th>Матрица</th>
-            <th>Комната</th>
+            <th><a href="?sort=room_class&order={% if current_sort == 'room_class' and current_order == 'asc' %}desc{% else %}asc{% endif %}">Комната</a></th>
             {% for warehouse in warehouses %}
                 <th colspan="1">{{ warehouse.name }}</th>
             {% endfor %}
