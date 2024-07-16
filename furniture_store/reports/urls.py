@@ -1,15 +1,17 @@
 from django.urls import path
 
-from .views import EditCommentView, DeleteCommentView, ShopProductListView
+from .views import ShopProductListView, CommentListView, AddCommentView
 
 app_name = 'reports'
 
 urlpatterns = [
-    path('', ShopProductListView.as_view(), name='products'),
+    path('', ShopProductListView.as_view(), name='auth'),
     path('products/', ShopProductListView.as_view(), name='products'),
-    path('comment/<int:pk>/edit/', EditCommentView.as_view(),
-         name='comment_edit'),
-    path('comment/<int:pk>/delete/', DeleteCommentView.as_view(),
-         name='comment_delete'),
-
+    path(
+        'comments/<int:store_id>/<str:product_article>/',
+        CommentListView.as_view(),
+        name='comments'
+    ),
+    path('comments/<int:store_id>/<str:product_article>/add', AddCommentView.as_view(),
+         name='add_comment')
 ]

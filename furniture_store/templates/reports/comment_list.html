@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% load tz %}
+
+{% block title %}
+Комментарии
+{% endblock %}
+{% block content %}
+    {% if user.is_authenticated %}
+        <!-- Вывод информации о магазине и продукте -->
+        <h1>{{ store.name }} - {{ product.name }}</h1>
+        <h1>{{ product.article }}</h1>
+        <hr>
+        <!-- Вывод списка комментариев -->
+        <ul id="comments-list">
+            {% for comment in comments %}
+            <li>{{ comment.author }}: {{ comment.text }}</li>
+            <small class="text-muted">Дата комментария:{{ comment.created_at|timezone:"Asia/Almaty" }}</small> <br>
+            <small class="text-muted">Выполнить: {{ comment.finish_planned_date }} </small>
+            {% empty %}
+                <li>Комментариев нет.</li>
+            {% endfor %}
+        </ul>
+        <!-- Форма для добавления нового комментария -->
+            <div class="card-body">
+                <div class="col-md-6">
+                <form method="post" id="comment-form">
+                    {% csrf_token %}
+                    {% bootstrap_form form %}
+                    {% bootstrap_button button_type="submit" content="Отправить" %}
+                </form>
+            </div>
+        </div>
+        <!-- Ссылка на возврат к списку продуктов -->
+        <a href="{% url 'reports:products' %}" class="btn btn-secondary">Назад к списку продуктов</a>
+    {% endif %}
+<!-- JavaScript для отправки формы через AJAX -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#comment-form').submit(function (event) {
+                event.preventDefault();
+
+                var formData = $(this).serialize();
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{% url 'reports:add_comment' store_id=store.id product_article=product.article %}",
+                    data: formData,
+                    dataType: 'json',
+                    success: function (response) {
+                        var almatyTime = new Date().toLocaleString("ru-RU", {timeZone: "Asia/Almaty"});
+                        var newComment = '<li>' + response.text + '<br>' + '<small class="text-muted">' + almatyTime + '</small></li>';
+                        if ($('#comments-list li').length > 0) {
+                            $('#comments-list li:first').before(newComment);
+                        } else {
+                            $('#comments-list').html(newComment);
+                        }
+                        $('#comment-form')[0].reset();
+                    },
+                    error: function (response) {
+                        alert('Произошла ошибка при добавлении комментария.');
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}

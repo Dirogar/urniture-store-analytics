@@ -28,7 +28,8 @@ class Store(models.Model):
         verbose_name='Название магазина'
     )
     users = models.ManyToManyField(
-        User, related_name='stores',
+        User,
+        related_name='stores',
         blank=True,
         verbose_name='Пользователи'
     )
@@ -143,13 +144,17 @@ class StoreProduct(models.Model):
 class Comment(models.Model):
     text = models.TextField(verbose_name='Комментарий')
     created_at = models.DateTimeField(auto_now_add=True)
-    finish_planned_date = models.DateTimeField()
+    finish_planned_date = models.DateTimeField(
+        verbose_name='Планируемая дата выполнения'
+    )
     product = models.ForeignKey(
         Product,
         to_field='article',
         on_delete=models.CASCADE,
         verbose_name='Товар',
-        null=True
+        null=True,
+        db_column='product_article'
+
     )
     store = models.ForeignKey(Store, on_delete=models.CASCADE, null=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)

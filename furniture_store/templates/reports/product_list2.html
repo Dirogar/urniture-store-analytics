@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load django_bootstrap5 %}
 {% load custom_tags %}
 {% block title %}
 Матрица
@@ -11,10 +12,10 @@
 <table class="table table-hover table-lg table-responsive table-striped table-bordered">
     <thead>
         <tr class="table-light sticky-header">
-            <th colspan="9"></th>
+            <th colspan="8"></th>
             <th colspan="3">Склады</th>
             {% for store in stores %}
-            <th colspan="6">{{ store.name }}</th>
+                <th colspan="5">{{ store.name }}</th>
             {% endfor %}
         </tr>
         <tr class="sub-header">
@@ -26,17 +27,15 @@
             <th>Категория</th>
             <th>Сегмент</th>
             <th>Матрица</th>
-            <th>Комментарий ГО</th>
             {% for warehouse in warehouses %}
-            <th colspan="1">{{ warehouse.name }}</th>
+                <th colspan="1">{{ warehouse.name }}</th>
             {% endfor %}
             {% for store in stores %}
-            <th>План</th>
-            <th>Факт</th>
-            <th>Отклонение</th>
-            <th>Площадь</th>
-            <th>Комментарий РАМ/РМ</th>
-            <th>Комментарий СС/АМ</th>
+                <th>План</th>
+                <th>Факт</th>
+                <th>Отклонение</th>
+                <th>Площадь</th>
+                <th>Комментарии</th>
             {% endfor %}
         </tr>
     </thead>
@@ -51,32 +50,37 @@
             <td>{{ product.category }}</td>
             <td>{{ product.segment }}</td>
             <td>{{ product.matrix }}</td>
-            <td>Комментарий ГО</td>
             {% for warehouse in warehouses %}
-            <td>
-            {% with warehouse_item=warehouse_data|get_item:product.article|get_item:warehouse.id %}
-                {% if warehouse_item %}
-                {{ warehouse_item }}
-                {% else %}
-                0
-                {% endif %}
-            </td>
-            {% endwith %}
+                <td>
+                    {% with warehouse_item=warehouse_data|get_item:product.article|get_item:warehouse.id %}
+                        {% if warehouse_item %}
+                            {{ warehouse_item }}
+                            {% else %}
+                            0
+                        {% endif %}
+                    {% endwith %}
+                </td>
             {% endfor %}
             {% for store in stores %}
-            {% with exhibition=store_data|get_item:product.article|get_item:store.id %}
-            <td>{{ exhibition.plan_exhibition|default_if_none:"0" }}</td>
-            <td>{{ exhibition.fact_exhibition|default_if_none:"0"  }}</td>
-            <td>{{ exhibition.deviation|default_if_none:"0"  }}</td>
-            {% endwith %}
-            {% with doubled_quare=product.square|square %}
-            <td>{{ doubled_quare }}</td>
-            {% endwith %}
-            <td>Комментарий РМ</td>
-            <td>Комментарий СС</td>
+                {% with exhibition=store_data|get_item:product.article|get_item:store.id %}
+                    <td>{{ exhibition.plan_exhibition|default_if_none:"0" }}</td>
+                    <td>{{ exhibition.fact_exhibition|default_if_none:"0"  }}</td>
+                    <td>{{ exhibition.deviation|default_if_none:"0"  }}</td>
+                {% endwith %}
+                {% with doubled_quare=product.square|square %}
+                    <td>{{ doubled_quare }}</td>
+                {% endwith %}
+                <td>
+                    <a href="{% url 'reports:comments' store.id product.article %}" class="btn btn-info">Комментарии</a>
+                </td>
             {% endfor %}
         </tr>
     {% endfor %}
     </tbody>
 </table>
 {% endblock %}
+
+
+
+
+
