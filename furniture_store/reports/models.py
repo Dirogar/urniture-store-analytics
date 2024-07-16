@@ -41,6 +41,9 @@ class Store(models.Model):
     def __str__(self):
         return self.name
 
+class RoomClass(models.Model):
+    name = models.CharField(max_length=5, unique=True)
+
 
 class Product(models.Model):
     article = models.CharField(
@@ -82,6 +85,12 @@ class Product(models.Model):
         max_length=254,
         null=True,
         verbose_name='Матрица'
+    )
+    room_class = models.ForeignKey(
+        RoomClass,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
     )
 
     class Meta:
@@ -166,5 +175,3 @@ class Comment(models.Model):
     def __str__(self):
         return self.text
 
-class RoomClass(models.Model):
-    ...

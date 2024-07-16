@@ -8,7 +8,7 @@ from django.urls import reverse, reverse_lazy
 from django.http import JsonResponse
 from django.views.generic.detail import SingleObjectMixin
 
-from .models import Store, Comment, User, Product, Warehouse
+from .models import Store, Comment, User, Product, Warehouse, RoomClass
 from .forms import CommentForm
 
 
@@ -66,6 +66,7 @@ class CommentListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         store_id = self.kwargs['store_id']
         product_article = self.kwargs['product_article']
+
 
         store = Store.objects.get(id=store_id)
         product = Product.objects.get(article=product_article)

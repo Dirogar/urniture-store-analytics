@@ -12,7 +12,7 @@
 <table class="table table-hover table-lg table-responsive table-striped table-bordered">
     <thead>
         <tr class="table-light sticky-header">
-            <th colspan="8"></th>
+            <th colspan="9"></th>
             <th colspan="3">Склады</th>
             {% for store in stores %}
                 <th colspan="5">{{ store.name }}</th>
@@ -27,6 +27,7 @@
             <th>Категория</th>
             <th>Сегмент</th>
             <th>Матрица</th>
+            <th>Комната</th>
             {% for warehouse in warehouses %}
                 <th colspan="1">{{ warehouse.name }}</th>
             {% endfor %}
@@ -50,6 +51,7 @@
             <td>{{ product.category }}</td>
             <td>{{ product.segment }}</td>
             <td>{{ product.matrix }}</td>
+            <td>{{ product.room_class.name }}</td>
             {% for warehouse in warehouses %}
                 <td>
                     {% with warehouse_item=warehouse_data|get_item:product.article|get_item:warehouse.id %}
