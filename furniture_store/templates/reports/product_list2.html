@@ -15,7 +15,9 @@
             <th colspan="9"></th>
             <th colspan="3">Склады</th>
             {% for store in stores %}
-                <th colspan="5">{{ store.name }}</th>
+            <th colspan="5">{{ store.name }} <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ store }}">
+  Информация о салоне
+</button> </th>
             {% endfor %}
         </tr>
         <tr class="sub-header">

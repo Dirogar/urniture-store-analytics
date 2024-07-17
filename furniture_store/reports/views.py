@@ -21,9 +21,9 @@ class ShopProductListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         """Возвращает связанные данные"""
         queryset = Product.objects.prefetch_related(
-            'warehouseproduct_set', 'storeproduct_set'
+            'warehouse_products', 'store_products'
         ).all()
-        sort_by = self.request.GET.get('sort', 'default')
+        sort_by = self.request.GET.get('sort', 'article')
         order = self.request.GET.get('order', 'asc')
 
         if order == 'desc':
@@ -47,10 +47,10 @@ class ShopProductListView(LoginRequiredMixin, ListView):
         for product in context['products']:
             warehouse_data[product.article] = {
                 wp.warehouse_id: wp.stock for wp
-                in product.warehouseproduct_set.all()
+                in product.warehouse_products.all()
             }
             store_data[product.article] = {sp.store_id: sp for sp in
-                                           product.storeproduct_set.all()}
+                                           product.store_products.all()}
 
         context['warehouse_data'] = warehouse_data
         context['store_data'] = store_data

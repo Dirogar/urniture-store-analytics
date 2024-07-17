@@ -97,7 +97,8 @@ class Product(models.Model):
         RoomClass,
         on_delete=models.CASCADE,
         null=True,
-        blank=True
+        blank=True,
+        related_name='products'
     )
 
     class Meta:
@@ -112,21 +113,35 @@ class WarehouseProduct(models.Model):
     product = models.ForeignKey(
         Product,
         to_field='article',
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name='warehouse_products'
     )
-    warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE)
+    warehouse = models.ForeignKey(
+        Warehouse,
+        on_delete=models.CASCADE,
+        related_name='warehouse_products'
+    )
     stock = models.IntegerField(null=False, default=0, verbose_name='Остаток')
 
     class Meta:
-        unique_together = (('warehouse', 'product'),)
+        constraints = [
+            models.UniqueConstraint(fields=['warehouse', 'product'], name='unique_warehouse_product')
+        ]
+        verbose_name = 'Продукт на складе'
+        verbose_name_plural = 'Продукты на складе'
 
 
 class StoreProduct(models.Model):
-    store = models.ForeignKey(Store, on_delete=models.CASCADE)
+    store = models.ForeignKey(
+        Store,
+        on_delete=models.CASCADE,
+        related_name='store_products'
+    )
     product = models.ForeignKey(
         Product,
         on_delete=models.CASCADE,
-        to_field='article'
+        to_field='article',
+        related_name='store_products'
     )
     plan_exhibition = models.IntegerField(
         null=False,
@@ -152,7 +167,10 @@ class StoreProduct(models.Model):
         return f'{self.product.name} - {self.store.name}'
 
     class Meta:
-        unique_together = (('store', 'product'),)
+        constraints = [
+            models.UniqueConstraint(fields=['store', 'product'],
+                                    name='unique_store_product')
+            ]
         verbose_name = 'Мебельный салон'
         verbose_name_plural = 'Мебельные салоны'
 
@@ -169,11 +187,20 @@ class Comment(models.Model):
         on_delete=models.CASCADE,
         verbose_name='Товар',
         null=True,
-        db_column='product_article'
-
+        db_column='product_article',
+        related_name='comments'
     )
-    store = models.ForeignKey(Store, on_delete=models.CASCADE, null=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    store = models.ForeignKey(
+        Store,
+        on_delete=models.CASCADE,
+        null=True,
+        related_name='comments'
+    )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='comments'
+    )
 
     class Meta:
         verbose_name = 'Комментарий'
