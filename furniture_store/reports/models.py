@@ -6,6 +6,7 @@ User = get_user_model()
 
 DEFAULT_AREA = 0
 
+
 class Warehouse(models.Model):
     name = models.CharField(
         max_length=254,
@@ -41,15 +42,13 @@ class Store(models.Model):
     def __str__(self):
         return self.name
 
-class RoomClass(models.Model):
-    name = models.CharField(max_length=5, unique=True)
+
+class ProductCategory(models.Model):
+    name = models.CharField(max_length=128, unique=True)
 
     class Meta:
-        verbose_name = 'Класс комнаты'
-        verbose_name_plural = 'Классы комнат'
-
-    def __str__(self):
-        return self.name
+        verbose_name = 'Категория',
+        verbose_name_plural = 'Категории'
 
 
 class Product(models.Model):
@@ -78,10 +77,13 @@ class Product(models.Model):
         null=True,
         verbose_name='Площадь номенклатуры'
     )
-    category = models.CharField(
-        max_length=254,
+    category = models.ForeignKey(
+        ProductCategory,
+        on_delete=models.CASCADE,
         null=True,
-        verbose_name='Категория'
+        blank=True,
+        verbose_name='Категория',
+        related_name='category_product'
     )
     segment = models.CharField(
         max_length=254,
@@ -93,12 +95,11 @@ class Product(models.Model):
         null=True,
         verbose_name='Матрица'
     )
-    room_class = models.ForeignKey(
-        RoomClass,
-        on_delete=models.CASCADE,
+    room_class = models.CharField(
+        max_length=8,
         null=True,
         blank=True,
-        related_name='products'
+        verbose_name='Класс комнаты'
     )
 
     class Meta:
@@ -114,7 +115,8 @@ class WarehouseProduct(models.Model):
         Product,
         to_field='article',
         on_delete=models.CASCADE,
-        related_name='warehouse_products'
+        related_name='warehouse_products',
+        db_column='product_article',
     )
     warehouse = models.ForeignKey(
         Warehouse,
@@ -125,7 +127,8 @@ class WarehouseProduct(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['warehouse', 'product'], name='unique_warehouse_product')
+            models.UniqueConstraint(fields=['warehouse', 'product'],
+                                    name='unique_warehouse_product')
         ]
         verbose_name = 'Продукт на складе'
         verbose_name_plural = 'Продукты на складе'
@@ -141,7 +144,8 @@ class StoreProduct(models.Model):
         Product,
         on_delete=models.CASCADE,
         to_field='article',
-        related_name='store_products'
+        related_name='store_products',
+        db_column='product_article',
     )
     plan_exhibition = models.IntegerField(
         null=False,
@@ -170,10 +174,30 @@ class StoreProduct(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['store', 'product'],
                                     name='unique_store_product')
-            ]
+        ]
         verbose_name = 'Мебельный салон'
         verbose_name_plural = 'Мебельные салоны'
 
+
+class StoreCategory(models.Model):
+    store = models.ForeignKey(
+        Store,
+        on_delete=models.CASCADE,
+        verbose_name='Магазин',
+        related_name='store'
+    )
+    category = models.ForeignKey(
+        ProductCategory,
+        on_delete=models.CASCADE,
+        related_name='category'
+    )
+
+    class Meta:
+        verbose_name = 'Рабочая категория магазина'
+        verbose_name_plural = 'Рабочие категории магазинов'
+
+    def __str__(self):
+        return f'{self.store}_{self.category}'
 
 class Comment(models.Model):
     text = models.TextField(verbose_name='Комментарий')
@@ -208,4 +232,3 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.text
-

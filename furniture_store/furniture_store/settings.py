@@ -20,6 +20,7 @@ DB_USER = os.getenv('DB_USER')
 DB_PASSWORD = os.getenv('DB_PASSWORD')
 DB_HOST = os.getenv('DB_HOST')
 DB_PORT = os.getenv('DB_PORT')
+DB_SCHEMA = os.getenv('DB_SCHEMA')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -93,7 +94,10 @@ DATABASES = {
         "USER": DB_USER,
         "PASSWORD": DB_PASSWORD,
         "HOST": DB_HOST,
-        "PORT": DB_PORT
+        "PORT": DB_PORT,
+        "OPTIONS": {
+        "options": f'-c search_path={DB_SCHEMA}'
+    },
     }
 }
 

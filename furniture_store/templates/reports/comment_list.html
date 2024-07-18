@@ -51,7 +51,9 @@
                     dataType: 'json',
                     success: function (response) {
                         var almatyTime = new Date().toLocaleString("ru-RU", {timeZone: "Asia/Almaty"});
-                        var newComment = '<li>' + response.text + '<br>' + '<small class="text-muted">' + almatyTime + '</small></li>';
+                         var newComment = '<li>' + response.author + ': ' + response.text + '<br>' +
+                        '<small class="text-muted">Дата комментария: ' + almatyTime + '</small><br>' +
+                        '<small class="text-muted">Выполнить: ' + response.finish_planned_date + '</small></li>';
                         if ($('#comments-list li').length > 0) {
                             $('#comments-list li:first').before(newComment);
                         } else {

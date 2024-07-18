@@ -8,7 +8,7 @@ from django.urls import reverse, reverse_lazy
 from django.http import JsonResponse
 from django.views.generic.detail import SingleObjectMixin
 
-from .models import Store, Comment, User, Product, Warehouse, RoomClass
+from .models import Store, Comment, User, Product, Warehouse
 from .forms import CommentForm
 
 
@@ -96,12 +96,14 @@ class AddCommentView(CreateView):
         form.instance.author = self.request.user
         store_id = self.kwargs.get('store_id')
         product_article = self.kwargs.get('product_article')
+        author = self.kwargs.get('author')
         product = get_object_or_404(Product, article=product_article)
         form.instance.product = product
         form.instance.store_id = store_id
         self.object = form.save()
 
         data = {
+            'author': self.object.author,
             'text': self.object.text,
             'created_at': self.object.created_at.strftime('%Y-%m-%d %H:%M:%S')
         }
