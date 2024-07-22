@@ -16,6 +16,7 @@
         <ul id="comments-list">
             {% for comment in comments %}
             <li>{{ comment.author }}: {{ comment.text }}</li>
+
             <small class="text-muted">Дата комментария:{{ comment.created_at|timezone:"Asia/Almaty" }}</small> <br>
             <small class="text-muted">Выполнить: {{ comment.finish_planned_date }} </small>
             {% empty %}
@@ -24,7 +25,7 @@
         </ul>
         <!-- Форма для добавления нового комментария -->
             <div class="card-body">
-                <div class="col-md-6">
+                <div class="col-md-3">
                 <form method="post" id="comment-form">
                     {% csrf_token %}
                     {% bootstrap_form form %}
@@ -38,34 +39,45 @@
 <!-- JavaScript для отправки формы через AJAX -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function () {
-            $('#comment-form').submit(function (event) {
-                event.preventDefault();
+$(document).ready(function () {
+    $('#comment-form').submit(function (event) {
+        event.preventDefault();
 
-                var formData = $(this).serialize();
+        var formData = $(this).serialize();
 
-                $.ajax({
-                    type: 'POST',
-                    url: "{% url 'reports:add_comment' store_id=store.id product_article=product.article %}",
-                    data: formData,
-                    dataType: 'json',
-                    success: function (response) {
-                        var almatyTime = new Date().toLocaleString("ru-RU", {timeZone: "Asia/Almaty"});
-                         var newComment = '<li>' + response.author + ': ' + response.text + '<br>' +
-                        '<small class="text-muted">Дата комментария: ' + almatyTime + '</small><br>' +
-                        '<small class="text-muted">Выполнить: ' + response.finish_planned_date + '</small></li>';
-                        if ($('#comments-list li').length > 0) {
-                            $('#comments-list li:first').before(newComment);
-                        } else {
-                            $('#comments-list').html(newComment);
-                        }
-                        $('#comment-form')[0].reset();
-                    },
-                    error: function (response) {
-                        alert('Произошла ошибка при добавлении комментария.');
+        $.ajax({
+            type: 'POST',
+            url: "{% url 'reports:add_comment' store_id=store.id product_article=product.article %}",
+            data: formData,
+            dataType: 'json',
+            success: function (response) {
+                var almatyTime = new Date().toLocaleString("ru-RU", {timeZone: "Asia/Almaty"});
+                var newComment = '<li>' + response.author.username + ': ' + response.text + '<br>' +
+                '<small class="text-muted">Дата комментария: ' + almatyTime + '</small><br>' +
+                '<small class="text-muted">Выполнить: ' + response.finish_planned_date + '</small></li>';
+                if ($('#comments-list li').length > 0) {
+                    $('#comments-list li:first').before(newComment);
+                } else {
+                    $('#comments-list').html(newComment);
+                }
+                $('#comment-form')[0].reset();
+            },
+            error: function (response) {
+                // Очистка предыдущих ошибок
+                $('.alert-danger').remove();
+
+                // Добавление новых ошибок
+                var errors = response.responseJSON.errors;
+                for (var field in errors) {
+                    for (var i = 0; i < errors[field].length; i++) {
+                        var error = errors[field][i];
+                        var errorHtml = '<div class="alert alert-danger">' + error + '</div>';
+                        $('#comment-form [name=' + field + ']').after(errorHtml);
                     }
-                });
-            });
+                }
+            }
         });
+    });
+});
     </script>
 {% endblock %}
