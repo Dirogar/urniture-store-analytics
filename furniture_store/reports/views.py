@@ -52,8 +52,10 @@ class ShopProductListView(LoginRequiredMixin, ListView):
             store_data[product.article] = {sp.store_id: sp for sp in
                                            product.store_products.all()}
 
+
         context['warehouse_data'] = warehouse_data
         context['store_data'] = store_data
+
 
         return context
 
@@ -96,18 +98,20 @@ class AddCommentView(CreateView):
         form.instance.author = self.request.user
         store_id = self.kwargs.get('store_id')
         product_article = self.kwargs.get('product_article')
-        author = self.kwargs.get('author')
         product = get_object_or_404(Product, article=product_article)
         form.instance.product = product
         form.instance.store_id = store_id
         self.object = form.save()
 
         data = {
-            'author': self.object.author,
+            'author': {'id': self.object.author.id,
+                       'username': self.object.author.username},
             'text': self.object.text,
-            'created_at': self.object.created_at.strftime('%Y-%m-%d %H:%M:%S')
+            'created_at': self.object.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+            'finish_planned_date': self.object.finish_planned_date
         }
         return JsonResponse(data)
+
 
     def get_success_url(self):
         return self.request.path

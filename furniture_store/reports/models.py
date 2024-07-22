@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
+from .validators import validate_future_date
 
 User = get_user_model()
 
@@ -49,6 +50,9 @@ class ProductCategory(models.Model):
     class Meta:
         verbose_name = 'Категория',
         verbose_name_plural = 'Категории'
+
+    def __str__(self):
+        return self.name
 
 
 class Product(models.Model):
@@ -179,31 +183,12 @@ class StoreProduct(models.Model):
         verbose_name_plural = 'Мебельные салоны'
 
 
-class StoreCategory(models.Model):
-    store = models.ForeignKey(
-        Store,
-        on_delete=models.CASCADE,
-        verbose_name='Магазин',
-        related_name='store'
-    )
-    category = models.ForeignKey(
-        ProductCategory,
-        on_delete=models.CASCADE,
-        related_name='category'
-    )
-
-    class Meta:
-        verbose_name = 'Рабочая категория магазина'
-        verbose_name_plural = 'Рабочие категории магазинов'
-
-    def __str__(self):
-        return f'{self.store}_{self.category}'
-
 class Comment(models.Model):
     text = models.TextField(verbose_name='Комментарий')
     created_at = models.DateTimeField(auto_now_add=True)
     finish_planned_date = models.DateTimeField(
-        verbose_name='Планируемая дата выполнения'
+        verbose_name='Планируемая дата выполнения',
+        validators=[validate_future_date]
     )
     product = models.ForeignKey(
         Product,
