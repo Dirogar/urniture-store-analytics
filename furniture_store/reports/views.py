@@ -7,6 +7,7 @@ from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.http import JsonResponse
 from django.views.generic.detail import SingleObjectMixin
+from django.db.models import Q
 
 from .models import Store, Comment, User, Product, Warehouse
 from .forms import CommentForm
@@ -17,12 +18,20 @@ class ShopProductListView(LoginRequiredMixin, ListView):
     template_name = 'reports/product_list2.html'
     context_object_name = 'products'
     model = Product
+    paginate_by = 10
+
 
     def get_queryset(self):
         """Возвращает связанные данные"""
+        user = self.request.user
+        stores = user.stores.all()
+        print(f"Stores related to user: {stores}")
         queryset = Product.objects.prefetch_related(
             'warehouse_products', 'store_products'
-        ).all()
+        ).filter(
+            Q(store_products__store__users=user)
+        ).distinct()
+        print(f"Filtered queryset: {queryset}")  # Отладочное сообщение
         sort_by = self.request.GET.get('sort', 'article')
         order = self.request.GET.get('order', 'asc')
 
@@ -36,7 +45,8 @@ class ShopProductListView(LoginRequiredMixin, ListView):
         Возвращает связанные данные магазинов-продукутов, складов-продуктов
         """
         context = super().get_context_data(**kwargs)
-        context['stores'] = Store.objects.all()
+        user = self.request.user
+        context['stores'] = user.stores.all()
         context['warehouses'] = Warehouse.objects.all()
         context['current_sort'] = self.request.GET.get('sort', 'default')
         context['current_order'] = self.request.GET.get('order', 'asc')

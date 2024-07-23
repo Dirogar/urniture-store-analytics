@@ -45,6 +45,12 @@ class Store(models.Model):
 
 
 class ProductCategory(models.Model):
+    id = models.CharField(
+        primary_key=True,
+        max_length=18,
+        null=False,
+        verbose_name='Код'
+    )
     name = models.CharField(max_length=128, unique=True)
 
     class Meta:
@@ -58,7 +64,7 @@ class ProductCategory(models.Model):
 class Product(models.Model):
     article = models.CharField(
         primary_key=True,
-        max_length=9,
+        max_length=16,
         null=False,
         verbose_name='Артикул'
     )
@@ -83,11 +89,12 @@ class Product(models.Model):
     )
     category = models.ForeignKey(
         ProductCategory,
+        to_field='id',
         on_delete=models.CASCADE,
-        null=True,
-        blank=True,
         verbose_name='Категория',
-        related_name='category_product'
+        related_name='category_product',
+        null=True,
+        blank=True
     )
     segment = models.CharField(
         max_length=254,
@@ -152,20 +159,19 @@ class StoreProduct(models.Model):
         db_column='product_article',
     )
     plan_exhibition = models.IntegerField(
-        null=False,
-        blank=False,
-        default=0,
+        null=True,
+        blank=True,
         verbose_name='План выставки'
     )
     fact_exhibition = models.IntegerField(
-        null=False,
-        blank=False,
+        null=True,
+        blank=True,
         default=0,
         verbose_name='Факт выставки'
     )
     deviation = models.IntegerField(
-        null=False,
-        blank=False,
+        null=True,
+        blank=True,
         default=0,
         verbose_name='Отклонение'
 
