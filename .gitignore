@@ -164,3 +164,4 @@ cython_debug/
 #Папки со статикой и медиа
 media/
 static_dev/
+migrations/
