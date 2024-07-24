@@ -15,7 +15,7 @@
             <th colspan="9"></th>
             <th colspan="3">Склады</th>
             {% for store in stores %}
-            <th colspan="5">{{ store.name }} <br><button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ store }}">
+            <th colspan="5">{{ store.name }} <br><button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ store.info }}">
   Информация о салоне
 </button> </th>
             {% endfor %}

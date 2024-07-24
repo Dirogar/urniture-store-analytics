@@ -35,6 +35,11 @@ class Store(models.Model):
         blank=True,
         verbose_name='Пользователи'
     )
+    info = models.TextField(
+        null=True,
+        blank=True,
+        verbose_name='Информация о салоне'
+    )
 
     class Meta:
         verbose_name = 'Магазин'
@@ -134,7 +139,7 @@ class WarehouseProduct(models.Model):
         on_delete=models.CASCADE,
         related_name='warehouse_products'
     )
-    stock = models.IntegerField(null=False, default=0, verbose_name='Остаток')
+    stock = models.IntegerField(null=True, default=0, verbose_name='Остаток')
 
     class Meta:
         constraints = [
