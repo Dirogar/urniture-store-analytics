@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import ShopProductListView, CommentListView, AddCommentView
+from .views import ShopProductListView, CommentListView, AddCommentView, update_store_product
 
 app_name = 'reports'
 
@@ -13,5 +13,6 @@ urlpatterns = [
         name='comments'
     ),
     path('comments/<int:store_id>/<str:product_article>/add', AddCommentView.as_view(),
-         name='add_comment')
+         name='add_comment'),
+    path('update_store_product/', update_store_product, name='update_store_product'),
 ]

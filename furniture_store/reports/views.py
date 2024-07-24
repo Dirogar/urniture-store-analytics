@@ -1,3 +1,5 @@
+import json
+
 from django.views.generic import (
     ListView, CreateView, UpdateView, DeleteView, DetailView, View
 )
@@ -7,9 +9,10 @@ from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.http import JsonResponse
 from django.views.generic.detail import SingleObjectMixin
+from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 
-from .models import Store, Comment, User, Product, Warehouse
+from .models import Store, Comment, User, Product, Warehouse, StoreProduct
 from .forms import CommentForm
 
 
@@ -25,13 +28,11 @@ class ShopProductListView(LoginRequiredMixin, ListView):
         """Возвращает связанные данные"""
         user = self.request.user
         stores = user.stores.all()
-        print(f"Stores related to user: {stores}")
         queryset = Product.objects.prefetch_related(
             'warehouse_products', 'store_products'
         ).filter(
             Q(store_products__store__users=user)
         ).distinct()
-        print(f"Filtered queryset: {queryset}")  # Отладочное сообщение
         sort_by = self.request.GET.get('sort', 'article')
         order = self.request.GET.get('order', 'asc')
 
@@ -127,6 +128,21 @@ class AddCommentView(CreateView):
         return self.request.path
 
 
+@csrf_exempt
+def update_store_product(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        product_article = data.get('product')
+        store_id = data.get('store')
+        value = data.get('value')
+        field = data.get('field')
+        try:
+            store_product = StoreProduct.objects.get(product__article=product_article, store_id=store_id)
+            setattr(store_product, field, value)
+            store_product.save()
+            return JsonResponse({'success': True})
+        except Exception as e:
+            raise e
 
 
 

@@ -67,8 +67,8 @@
             {% endfor %}
             {% for store in stores %}
                 {% with exhibition=store_data|get_item:product.article|get_item:store.id %}
-                    <td>{{ exhibition.plan_exhibition|default_if_none:"0" }}</td>
-                    <td>{{ exhibition.fact_exhibition|default_if_none:"0"  }}</td>
+                    <td ondblclick="makeEditable(this)" data-product="{{ product.article }}" data-store="{{ store.id }}" data-field="plan_exhibition">{{ exhibition.plan_exhibition|default_if_none:"0" }}</td>
+                    <td >{{ exhibition.fact_exhibition|default_if_none:"0"  }}</td>
                     <td>{{ exhibition.deviation|default_if_none:"0"  }}</td>
                 {% endwith %}
                 {% if product.square is not None %}
@@ -86,10 +86,45 @@
     {% endfor %}
     </tbody>
 </table>
+<script>
+    function makeEditable(td) {
+        if (td.getElementsByTagName('input').length === 0) {
+            let currentValue = td.innerText;
+            td.innerHTML = `<input type="text" value="${currentValue}" onblur="updateData(this)" />`;
+            td.getElementsByTagName('input')[0].focus()
+        }
+    }
+    function updateData(input) {
+        let td = input.parentElement;
+        let newValue = input.value;
+        let product = td.getAttribute('data-product');
+        let store = td.getAttribute('data-store');
+        let field = td.getAttribute('data-field');
+
+        fetch("{% url 'reports:update_store_product' %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({
+                product: product,
+                store: store,
+                field: field,
+                value: newValue
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                td.innerText = newValue;
+            }
+            else {
+                alert('Ошибка обновления данных')
+                td.innerText = currentValue;
+            }
+        })
+    }
+</script>
 {% include "includes/paginator.html" %}
 {% endblock %}
-
-
-
-
-
