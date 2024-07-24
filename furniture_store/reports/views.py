@@ -137,9 +137,14 @@ def update_store_product(request):
         value = data.get('value')
         field = data.get('field')
         try:
-            store_product = StoreProduct.objects.get(product__article=product_article, store_id=store_id)
-            setattr(store_product, field, value)
-            store_product.save()
+            if field == 'room_class':
+                product = Product.objects.get(article=product_article)
+                setattr(product, field, value)
+                product.save()
+            else:
+                store_product = StoreProduct.objects.get(product__article=product_article, store_id=store_id)
+                setattr(store_product, field, value)
+                store_product.save()
             return JsonResponse({'success': True})
         except Exception as e:
             raise e

@@ -15,7 +15,7 @@
             <th colspan="9"></th>
             <th colspan="3">Склады</th>
             {% for store in stores %}
-            <th colspan="5">{{ store.name }} <br><button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ store.info }}">
+            <th colspan="5">{{ store.name }} <br><button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ store.info }}" >
   Информация о салоне
 </button> </th>
             {% endfor %}
@@ -35,7 +35,7 @@
             {% endfor %}
             {% for store in stores %}
                 <th>План</th>
-                <th>Факт</th>
+                <th><a href="?sort=category&order={% if current_sort == 'fact_exhibition' and current_order == 'asc' %}desc{% else %}asc{% endif %}" style="display: block; width: 100%; height: 100%; color: inherit; text-decoration: none;" class="sortable">Факт</a></th>
                 <th>Отклонение</th>
                 <th>Площадь</th>
                 <th>Комментарии</th>
@@ -53,7 +53,7 @@
             <td>{{ product.category }}</td>
             <td>{{ product.segment }}</td>
             <td>{{ product.matrix }}</td>
-            <td>{{ product.room_class }}</td>
+            <td ondblclick="makeEditable(this)" data-product="{{ product.article }}" data-field="room_class">{{ product.room_class }}</td>
             {% for warehouse in warehouses %}
                 <td>
                     {% with warehouse_item=warehouse_data|get_item:product.article|get_item:warehouse.id %}
@@ -126,5 +126,6 @@
         })
     }
 </script>
+
 {% include "includes/paginator.html" %}
 {% endblock %}
