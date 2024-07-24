@@ -80,6 +80,8 @@
                 {% endif %}
                 <td>
                     <a href="{% url 'reports:comments' store.id product.article %}" class="btn btn-info">Комментарии</a>
+                    <a class="text-muted">кол-во комментариев:</a>
+                    <a> {{ comments_data|dictkey:product.article|dictkey:store.id }}</a>
                 </td>
             {% endfor %}
         </tr>

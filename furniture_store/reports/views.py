@@ -54,6 +54,7 @@ class ShopProductListView(LoginRequiredMixin, ListView):
 
         warehouse_data = {}
         store_data = {}
+        comments_data = {}
 
         for product in context['products']:
             warehouse_data[product.article] = {
@@ -62,11 +63,16 @@ class ShopProductListView(LoginRequiredMixin, ListView):
             }
             store_data[product.article] = {sp.store_id: sp for sp in
                                            product.store_products.all()}
-
+            for store in context['stores']:
+                comments = Comment.objects.filter(store=store, product=product).order_by('-created_at')
+                if comments.exists():
+                    if store.id not in comments_data:
+                        comments_data[product.article] = {}
+                    comments_data[product.article][store.id] = comments.count()
 
         context['warehouse_data'] = warehouse_data
         context['store_data'] = store_data
-
+        context['comments_data'] = comments_data
 
         return context
 
@@ -148,6 +154,8 @@ def update_store_product(request):
             return JsonResponse({'success': True})
         except Exception as e:
             raise e
+
+
 
 
 

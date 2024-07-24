@@ -15,5 +15,15 @@ def default_if_none(queryset, key):
 
 @register.filter()
 def square(queryset: float):
-    return float(queryset*2)
+    return float(queryset * 2)
 
+
+@register.filter(name='dictkey')
+def dictkey(value, arg):
+    try:
+        if value:
+            return value[arg]
+        else:
+            return 0
+    except KeyError:
+        return None
