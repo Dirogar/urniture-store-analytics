@@ -144,7 +144,7 @@ class CommentList(LoginRequiredMixin, ListView):
     def get_queryset(self):
         queryset = Comment.objects.select_related(
             'product', 'store'
-        )
+        ).order_by('-created_at')
         return queryset
 
 
@@ -171,6 +171,28 @@ def update_store_product(request):
         except Exception as e:
             raise e
 
+@csrf_exempt
+def change_comment_status(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        comment_id = data.get('comment_id')
+
+        try:
+            comment = Comment.objects.get(id=comment_id)
+        except Comment.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Comment not found'}, status=HTTPStatus.NOT_FOUND)
+
+        current_status = comment.status
+        if current_status == 'Выполнено':
+            current_status = 'Не выполнено'
+        elif current_status == 'В работе':
+            current_status = 'Выполнено'
+        else:
+            current_status = 'В работе'
+        comment.status = current_status
+        comment.save()
+        return JsonResponse({'success': True, 'comment_id': comment.id, 'new_status': comment.status})
+    return JsonResponse({'success': False, 'error': 'Invalid request'}, status=HTTPStatus.NOT_FOUND)
 
 
 

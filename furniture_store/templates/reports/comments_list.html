@@ -9,7 +9,8 @@
 
 {% block content %}
     {% if user.is_authenticated %}
-<div class="container-sm text-left">
+<h1>Комментарии по всем товарам и салонам</h1>
+<div class="container-sm text-left" style="background-color:Lavender; border-radius:10px" >
         <div class="row align-items-start">
             {% if all_comments %}
                 {% for comment in all_comments %}
@@ -23,13 +24,15 @@
                     </div>
                     <div class="col-md-3">
                         {% if comment.status == 'Выполнено' %}
-                            <a class="fs-5 text-success">Статус: {{ comment.status }}</a>
+                            <a class="fs-5 text-success" id="comment_status_{{ comment.id }}">Статус: {{ comment.status }}</a>
                         {% elif comment.status == 'В работе' %}
-                            <a class="fs-5 text-warning">Статус: {{ comment.status }}</a>
+                            <a class="fs-5 text-warning" id="comment_status_{{ comment.id }}">Статус: {{ comment.status }}</a>
                         {% else %}
-                            <a class="fs-5 text-danger">Статус: {{ comment.status }}</a>
+                            <a class="fs-5 text-danger" id="comment_status_{{ comment.id }}">Статус: {{ comment.status }}</a>
                         {% endif %}
-                        <a>{{ comment.product_article }}</a>
+                        <div class="d-flex justify-content-left mt-3">
+                            <a class="btn btn-outline-secondary text-center" onclick="changeCommentStatus({{ comment.id }})">Изменить статус</a>
+                        </div>
                     </div>
                     <div class="col-md-5">
                         <a class="fs-7 text-secondary">Артикул: </a><a>{{ comment.product.article }}</a> <br>
@@ -43,6 +46,37 @@
             {% endif %}
         </div>
     </div>
-
     {% endif %}
+<script>
+    function changeCommentStatus(comment_id) {
+        fetch("{% url 'reports:change_comment_status' %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({
+                comment_id: comment_id
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                var statusElement = document.getElementById('comment_status_' + comment_id);
+                var newStatus = data.new_status;
+
+                if (newStatus === 'Выполнено') {
+                    statusElement.innerHTML = '<a class="fs-5 text-success">Статус: ' + newStatus + '</a>';
+                } else if (newStatus === 'В работе') {
+                    statusElement.innerHTML = '<a class="fs-5 text-warning">Статус: ' + newStatus + '</a>';
+                } else {
+                    statusElement.innerHTML = '<a class="fs-5 text-danger">Статус: ' + newStatus + '</a>';
+                }
+            } else {
+                alert('Ошибка изменения статуса')
+                }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+</script>
 {% endblock %}
