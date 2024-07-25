@@ -7,8 +7,8 @@
 {% block content %}
 <h1 class="text-dark" style="margin-left: 20px; padding-top: 8px; margin-bottom: -2px;">Матрица</h1>
 <hr>
-<button type="button" class="btn btn-success" style="margin-top: 7px; margin-bottom: 7px; margin-left: 20px; border: 0; background-color: rgb(33, 115, 70); color: rgb(255, 255, 255);">Экспорт в Excel</button>
-<hr class="my-0" style="position: sticky; width: 100%; top: 0;">
+<a type="button" class="btn btn-primary" href="{% url 'reports:all_comments' %}">Все комментарии</a>
+<hr>
 <table class="table table-hover table-lg table-responsive table-striped table-bordered">
     <thead>
         <tr class="table-light sticky-header">

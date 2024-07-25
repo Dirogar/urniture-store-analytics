@@ -221,9 +221,11 @@ class Comment(models.Model):
         on_delete=models.CASCADE,
         related_name='comments'
     )
-    is_completed = models.BooleanField(
-        default=False,
-        verbose_name= 'Выполнен ли комментарий'
+    status = models.CharField(
+        max_length=56,
+        null=False,
+        default='Не выполнено',
+        verbose_name= 'Статус комментария'
     )
 
     class Meta:

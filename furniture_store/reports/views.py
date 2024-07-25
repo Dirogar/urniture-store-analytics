@@ -66,7 +66,7 @@ class ShopProductListView(LoginRequiredMixin, ListView):
             for store in context['stores']:
                 comments = Comment.objects.filter(store=store, product=product).order_by('-created_at')
                 if comments.exists():
-                    if store.id not in comments_data:
+                    if product.article not in comments_data:
                         comments_data[product.article] = {}
                     comments_data[product.article][store.id] = comments.count()
 
@@ -77,8 +77,8 @@ class ShopProductListView(LoginRequiredMixin, ListView):
         return context
 
 
-class CommentListView(LoginRequiredMixin, ListView):
-    template_name = 'reports/comment_list.html'
+class StoreProductCommentListView(LoginRequiredMixin, ListView):
+    template_name = 'reports/store_product_comments.html'
     context_object_name = 'comments'
 
 
@@ -132,6 +132,22 @@ class AddCommentView(CreateView):
 
     def get_success_url(self):
         return self.request.path
+
+
+class CommentList(LoginRequiredMixin, ListView):
+    """Возвращает список всех комментариев"""
+    model = Comment
+    template_name = 'reports/comments_list.html'
+    context_object_name = 'all_comments'
+
+
+    def get_queryset(self):
+        queryset = Comment.objects.select_related(
+            'product', 'store'
+        )
+        return queryset
+
+
 
 
 @csrf_exempt

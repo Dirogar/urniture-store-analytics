@@ -26,4 +26,4 @@ def dictkey(value, arg):
         else:
             return 0
     except KeyError:
-        return None
+        return 0
