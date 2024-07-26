@@ -2,39 +2,55 @@
 {% load static %}
 {% load django_bootstrap5 %}
 {% load tz %}
+{% load custom_tags %}
 
 {% block title %}
 Комментарии
 {% endblock %}
 {% block content %}
     {% if user.is_authenticated %}
-        <!-- Вывод информации о магазине и продукте -->
-        <h1>{{ store.name }} - {{ product.name }}</h1>
-        <h1>{{ product.article }}</h1>
-        <hr>
-        <!-- Вывод списка комментариев -->
-        <ul id="comments-list">
-            {% for comment in comments %}
-            <li>{{ comment.author }}: {{ comment.text }}</li>
+        <div class="container text-left" style="background-color:Lavender; border-radius:10px">
+            <div class="row align-items-start">
+                <h1>{{ store.name }} - {{ product.name }}</h1>
+                <h1>{{ product.article }}</h1>
+                <hr>
+                <div class="col-md-6">
+                    <ul id="comments-list">
+                        {% for comment in comments %}
+                        <li class="text-uppercase">{{ comment.author }}:</li>
+                        <div style="background-color:LightGray; border-radius:10px">
+                            <a>{{ comment.text }}</a>
+                            </div>
+                        <small class="text-muted">Дата комментария:{{ comment.created_at|timezone:"Asia/Almaty" }}</small> <br>
+                        <small class="text-muted">Выполнить: {{ comment.finish_planned_date }} </small>
+                        <div>
+                            <a class="fs-5 {{ comment.status|status_color }}" id="comment_status_{{ comment.id }}">Статус: {{ comment.status }}</a>
 
-            <small class="text-muted">Дата комментария:{{ comment.created_at|timezone:"Asia/Almaty" }}</small> <br>
-            <small class="text-muted">Выполнить: {{ comment.finish_planned_date }} </small>
-            {% empty %}
-                <li>Комментариев нет.</li>
-            {% endfor %}
-        </ul>
-        <!-- Форма для добавления нового комментария -->
-            <div class="card-body">
-                <div class="col-md-3">
-                <form method="post" id="comment-form">
-                    {% csrf_token %}
-                    {% bootstrap_form form %}
-                    {% bootstrap_button button_type="submit" content="Отправить" %}
-                </form>
+                            <div class="d-flex justify-content-left mt-3">
+                                <a class="btn btn-outline-secondary text-center" onclick="changeCommentStatus({{ comment.id }})">Изменить статус</a>
+                            </div>
+                        </div>
+                        <hr>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="col-md-2"></div>
+                <div class="col-md-4">
+                    <!-- Форма для добавления нового комментария -->
+                        <div class="card-body">
+                            <div>
+                            <form method="post" id="comment-form">
+                                {% csrf_token %}
+                                {% bootstrap_form form %}
+                                {% bootstrap_button button_type="submit" content="Отправить" %}
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- Ссылка на возврат к списку продуктов -->
+                <a href="{% url 'reports:products' %}" class="btn btn-secondary">Назад к списку продуктов</a>
             </div>
         </div>
-        <!-- Ссылка на возврат к списку продуктов -->
-        <a href="{% url 'reports:products' %}" class="btn btn-secondary">Назад к списку продуктов</a>
     {% endif %}
 <!-- JavaScript для отправки формы через AJAX -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -80,4 +96,37 @@ $(document).ready(function () {
     });
 });
     </script>
+
+<script>
+    function changeCommentStatus(comment_id) {
+        fetch("{% url 'reports:change_comment_status' %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({
+                comment_id: comment_id
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                var statusElement = document.getElementById('comment_status_' + comment_id);
+                var newStatus = data.new_status;
+
+                if (newStatus === 'Выполнено') {
+                    statusElement.innerHTML = '<a class="fs-5 text-success">Статус: ' + newStatus + '</a>';
+                } else if (newStatus === 'В работе') {
+                    statusElement.innerHTML = '<a class="fs-5 text-warning">Статус: ' + newStatus + '</a>';
+                } else {
+                    statusElement.innerHTML = '<a class="fs-5 text-danger">Статус: ' + newStatus + '</a>';
+                }
+            } else {
+                alert('Ошибка изменения статуса')
+                }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+</script>
 {% endblock %}

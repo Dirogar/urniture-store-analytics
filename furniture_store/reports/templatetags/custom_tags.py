@@ -27,3 +27,13 @@ def dictkey(value, arg):
             return 0
     except KeyError:
         return 0
+
+
+@register.filter(name='status_color')
+def status_color(status):
+    if status == 'Выполнено':
+        return 'text-success'
+    elif status == 'В работе':
+        return 'text-warning'
+    else:
+        return 'text-danger'
