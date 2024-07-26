@@ -1,6 +1,5 @@
 asgiref==3.8.1
 Django==5.0.6
-django-auth-ldap==4.8.0
 django-bootstrap==0.2.4
 django-bootstrap5==24.2
 flake8==7.1.0
