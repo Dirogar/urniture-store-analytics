@@ -95,7 +95,7 @@ class Product(models.Model):
     category = models.ForeignKey(
         ProductCategory,
         to_field='id',
-        on_delete=models.CASCADE,
+        on_delete=models.DO_NOTHING,
         verbose_name='Категория',
         related_name='category_product',
         null=True,
@@ -130,13 +130,13 @@ class WarehouseProduct(models.Model):
     product = models.ForeignKey(
         Product,
         to_field='article',
-        on_delete=models.CASCADE,
+        on_delete=models.DO_NOTHING,
         related_name='warehouse_products',
         db_column='product_article',
     )
     warehouse = models.ForeignKey(
         Warehouse,
-        on_delete=models.CASCADE,
+        on_delete=models.DO_NOTHING,
         related_name='warehouse_products'
     )
     stock = models.IntegerField(null=True, default=0, verbose_name='Остаток')
@@ -153,12 +153,12 @@ class WarehouseProduct(models.Model):
 class StoreProduct(models.Model):
     store = models.ForeignKey(
         Store,
-        on_delete=models.CASCADE,
+        on_delete=models.DO_NOTHING,
         related_name='store_products'
     )
     product = models.ForeignKey(
         Product,
-        on_delete=models.CASCADE,
+        on_delete=models.DO_NOTHING,
         to_field='article',
         related_name='store_products',
         db_column='product_article',
@@ -204,7 +204,7 @@ class Comment(models.Model):
     product = models.ForeignKey(
         Product,
         to_field='article',
-        on_delete=models.CASCADE,
+        on_delete=models.DO_NOTHING,
         verbose_name='Товар',
         null=True,
         db_column='product_article',
@@ -212,13 +212,13 @@ class Comment(models.Model):
     )
     store = models.ForeignKey(
         Store,
-        on_delete=models.CASCADE,
+        on_delete=models.DO_NOTHING,
         null=True,
         related_name='comments'
     )
     author = models.ForeignKey(
         User,
-        on_delete=models.CASCADE,
+        on_delete=models.DO_NOTHING,
         related_name='comments'
     )
     status = models.CharField(
