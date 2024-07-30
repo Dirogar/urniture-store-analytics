@@ -1,19 +1,29 @@
+# pull official base image
 FROM python:3.12-slim
 
-WORKDIR /app
+# set work directory
+WORKDIR /usr/src/app
 
-COPY requirements.txt ./
-COPY furniture_store ./furniture_store
-COPY reports ./reports
-COPY static_dev ./static_dev
-COPY staticfiles ./staticfiles
-COPY templates ./templates
+# set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-RUN pip install --no-cache-dir -r requirements.txt
+# install system dependencies
+RUN apt-get update && apt-get install -y
 
-COPY furniture_store/entrypoint.sh
-RUN chmod +x furniture_store/entrypoint.sh
+# install dependencies
+RUN pip install --upgrade pip
 
-EXPOSE 8000
+COPY ./requirements.txt .
+RUN pip install -r requirements.txt
 
-ENTRYPOINT ["./entrypoint.sh"]
+# copy entrypoint.sh
+COPY ./entrypoint.sh .
+RUN sed -i 's/\r$//g' /usr/src/app/entrypoint.sh
+RUN chmod +x /usr/src/app/entrypoint.sh
+
+# copy project
+COPY . .
+
+# run entrypoint.sh
+ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
