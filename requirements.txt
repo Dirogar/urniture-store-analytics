@@ -8,6 +8,7 @@ gunicorn==22.0.0
 mccabe==0.7.0
 packaging==24.1
 psycopg==3.2.1
+psycopg-binary
 pyasn1==0.6.0
 pyasn1_modules==0.4.0
 pycodestyle==2.12.0
