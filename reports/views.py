@@ -46,7 +46,7 @@ class ShopProductListView(LoginRequiredMixin, ListView):
         """
         context = super().get_context_data(**kwargs)
         user = self.request.user
-        context['stores'] = user.stores.all()
+        context['stores'] = user.stores.all().order_by('name')
         context['warehouses'] = Warehouse.objects.all()
         context['current_sort'] = self.request.GET.get('sort', 'default')
         context['current_order'] = self.request.GET.get('order', 'asc')
