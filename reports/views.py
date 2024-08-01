@@ -21,7 +21,6 @@ class ShopProductListView(LoginRequiredMixin, ListView):
     template_name = 'reports/product_list2.html'
     context_object_name = 'products'
     model = Product
-    paginate_by = 10
 
 
     def get_queryset(self):
