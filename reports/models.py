@@ -10,27 +10,18 @@ User = get_user_model()
 
 DEFAULT_AREA = 0
 
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    work_position = models.TextField(
-        max_length=100,
-        blank=True,
-        verbose_name='Должность'
-    )
 
+class City(models.Model):
+    name = models.CharField(max_length=100,
+                            null=False,
+                            blank=False,
+                            verbose_name='Название города')
     class Meta:
-        verbose_name = 'Допольнительная информация'
+        verbose_name = 'Город'
+        verbose_name_plural = 'Города'
 
-
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
-
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
-
+    def __str__(self):
+        return self.name
 
 class Warehouse(models.Model):
     name = models.CharField(
@@ -63,6 +54,12 @@ class Store(models.Model):
         null=True,
         blank=True,
         verbose_name='Информация о салоне'
+    )
+    city = models.ForeignKey(
+        City,
+        related_name='cities',
+        blank=False,
+        on_delete=models.DO_NOTHING
     )
 
     class Meta:
@@ -258,3 +255,33 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.text
+
+
+
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    work_position = models.TextField(
+        max_length=100,
+        blank=True,
+        verbose_name='Должность'
+    )
+    store = models.OneToOneField(
+        Store,
+        on_delete=models.DO_NOTHING,
+        verbose_name='Мебельный салон'
+    )
+
+    class Meta:
+        verbose_name = 'Допольнительная информация'
+
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
