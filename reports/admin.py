@@ -2,10 +2,12 @@ from django import forms
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.admin.widgets import FilteredSelectMultiple
+from django.utils.translation import gettext, gettext_lazy as _
 
 from django.contrib.auth.models import User
-from .models import Store, Product, Warehouse, ProductCategory
+from .models import Store, Product, Warehouse, ProductCategory, Profile
 
 User = get_user_model()
 
@@ -24,6 +26,30 @@ class StoreAdminForm(forms.ModelForm):
         ),
         label=''
     )
+
+
+class ProfileInline(admin.StackedInline):
+    model = Profile
+    can_delete = False
+
+
+admin.site.unregister(User)
+
+
+class CustomUserCreationForm(UserCreationForm):
+    class Meta:
+        model = UserCreationForm.Meta.model
+        fields = '__all__'
+        field_classes = UserCreationForm.Meta.field_classes
+
+
+@admin.register(User)
+class UserAdmin(BaseUserAdmin):
+    add_form = CustomUserCreationForm
+    add_fieldsets = (
+        (None, {'fields': ('username', 'password1', 'password2')}),
+    )
+    inlines = (ProfileInline,)
 
 
 @admin.register(Store)
