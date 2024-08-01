@@ -10,14 +10,14 @@
 <a type="button" class="btn btn-primary" href="{% url 'reports:all_comments' %}">Все комментарии</a>
 <hr>
 <table class="table table-hover table-lg table-responsive table-striped table-bordered">
-    <thead>
+    <thead class="table-fixed">
         <tr class="table-light sticky-header">
             <th colspan="9"></th>
             <th colspan="3">Склады</th>
             {% for store in stores %}
             <th colspan="5">{{ store.name }} <br><button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ store.info }}" >
-  Информация о салоне
-</button> </th>
+                Информация о салоне </button>
+            </th>
             {% endfor %}
         </tr>
         <tr class="sub-header">
