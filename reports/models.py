@@ -4,10 +4,9 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AbstractUser, Group, Permission
 from .validators import validate_future_date
 
-
-User = get_user_model()
 
 DEFAULT_AREA = 0
 
@@ -41,17 +40,12 @@ class Warehouse(models.Model):
         return self.name
 
 
+
 class Store(models.Model):
     name = models.CharField(
         max_length=254,
         null=False,
         verbose_name='Название магазина'
-    )
-    users = models.ManyToManyField(
-        User,
-        related_name='stores',
-        blank=True,
-        verbose_name='Пользователи'
     )
     info = models.TextField(
         null=True,
@@ -71,6 +65,31 @@ class Store(models.Model):
 
     def __str__(self):
         return self.name
+class User(AbstractUser):
+    work_position = models.CharField(
+        max_length=100,
+        null=True,
+        blank=True,
+        verbose_name='Должность'
+    )
+    store = models.ManyToManyField(
+        Store,
+        related_name='stores'
+    )
+    groups = models.ManyToManyField(
+        Group,
+        related_name='custom_user_set',  # Уникальное имя для related_name
+        blank=True,
+        help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.',
+        verbose_name='groups',
+    )
+    user_permissions = models.ManyToManyField(
+        Permission,
+        related_name='custom_user_permission_set',  # Уникальное имя для related_name
+        blank=True,
+        help_text='Specific permissions for this user.',
+        verbose_name='user permissions',
+    )
 
 
 class ProductCategory(models.Model):
@@ -260,32 +279,4 @@ class Comment(models.Model):
         return self.text
 
 
-class Profile(models.Model):
-    uuid = models.UUIDField(
-        primary_key=True,
-        editable=False,
-        default=uuid.uuid4,
-        verbose_name='UUID'
-    )
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    work_position = models.TextField(
-        max_length=20,
-        blank=True,
-        verbose_name='Должность'
-    )
-    class Meta:
-        verbose_name = 'Допольнительная информация'
 
-    def __str__(self):
-        return f'{self.user} - {self.work_position}'
-
-
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
-
-
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()

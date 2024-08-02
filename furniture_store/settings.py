@@ -163,6 +163,7 @@ ADMINS=(
 )
 MANAGERS = ADMINS
 
+AUTH_USER_MODEL = 'reports.User'
 
 LOGGING = {
     "version": 1,
