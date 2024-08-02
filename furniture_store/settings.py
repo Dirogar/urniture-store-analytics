@@ -170,7 +170,7 @@ LOGGING = {
         "file": {
             "level": os.getenv("DJANGO_LOG_LEVEL", "DEBUG"),
             "class": "logging.FileHandler",
-            "filename": "/var/log/django-main.log",
+            "filename": "django-main.log",
         },
     },
     "loggers": {
