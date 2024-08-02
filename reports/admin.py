@@ -7,7 +7,8 @@ from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.utils.translation import gettext, gettext_lazy as _
 
 from django.contrib.auth.models import User
-from .models import Store, Product, Warehouse, ProductCategory, City, User
+from .models import (Store, Product, Warehouse, ProductCategory, City, User,
+                     WorkPosition)
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -17,7 +18,7 @@ class CustomUserCreationForm(UserCreationForm):
         widget=FilteredSelectMultiple(
             verbose_name='Магазины',
             is_stacked=False
-        ),
+        ),label=''
     )
 
     class Meta:
@@ -32,7 +33,7 @@ class CustomUserChangeForm(UserChangeForm):
         widget=FilteredSelectMultiple(
             verbose_name='Магазины',
             is_stacked=False
-        ),
+        ),label=''
     )
     class Meta:
         model = User
@@ -68,5 +69,6 @@ admin.site.register(Product)
 admin.site.register(ProductCategory)
 admin.site.register(City)
 admin.site.register(Store)
+admin.site.register(WorkPosition)
 
 

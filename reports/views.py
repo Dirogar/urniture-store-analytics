@@ -27,12 +27,10 @@ class ShopProductListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         """Возвращает связанные данные"""
         user = self.request.user
-        stores = user.stores.all()
+        stores = user.store.all()
         queryset = Product.objects.prefetch_related(
             'warehouse_products', 'store_products'
-        ).filter(
-            Q(store_products__store__users=user)
-        ).distinct()
+        ).filter()
         sort_by = self.request.GET.get('sort', 'article')
         order = self.request.GET.get('order', 'asc')
 
@@ -47,7 +45,7 @@ class ShopProductListView(LoginRequiredMixin, ListView):
         """
         context = super().get_context_data(**kwargs)
         user = self.request.user
-        context['stores'] = user.stores.all().order_by('name')
+        context['stores'] = user.store.all().order_by('name')
         context['warehouses'] = Warehouse.objects.all()
         context['current_sort'] = self.request.GET.get('sort', 'default')
         context['current_order'] = self.request.GET.get('order', 'asc')
