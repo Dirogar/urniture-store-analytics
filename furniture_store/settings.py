@@ -161,3 +161,23 @@ ADMINS=(
     ('Max', EMAIL_HOST_USER),
 )
 MANAGERS = ADMINS
+
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "file": {
+            "level": os.getenv("DJANGO_LOG_LEVEL", "DEBUG"),
+            "class": "logging.FileHandler",
+            "filename": "/var/log/django-main.log",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["file"],
+            "level": os.getenv("DJANGO_LOG_LEVEL", "DEBUG"),
+            "propagate": True,
+        },
+    },
+}
