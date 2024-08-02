@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+from logging.handlers import RotatingFileHandler
 
 load_dotenv()
 
@@ -169,8 +170,17 @@ LOGGING = {
     "handlers": {
         "file": {
             "level": os.getenv("DJANGO_LOG_LEVEL", "DEBUG"),
-            "class": "logging.FileHandler",
+            "class": "logging.handlers.RotatingFileHandler",
             "filename": "django-main.log",
+            "maxBytes": 1024 - 1024 - 5, #5 MB
+            "backupCount": 5,
+            "formatter": "verbose",
+        },
+    },
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} {asctime} {module} {message}",
+            "style": "{",
         },
     },
     "loggers": {
