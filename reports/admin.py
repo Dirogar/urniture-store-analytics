@@ -27,6 +27,12 @@ class StoreAdminForm(forms.ModelForm):
         label=''
     )
 
+
+class ProfileInline(admin.StackedInline):
+    model = Profile
+    can_delete = False
+
+
 admin.site.unregister(User)
 
 
@@ -43,6 +49,7 @@ class UserAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {'fields': ('username', 'password1', 'password2')}),
     )
+    inlines = (ProfileInline,)
 
 
 @admin.register(Store)

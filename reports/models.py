@@ -277,15 +277,14 @@ class Profile(models.Model):
         verbose_name = 'Допольнительная информация'
 
     def __str__(self):
-        return f'{self.user.name} - {self.work_position}'
+        return f'{self.user} - {self.work_position}'
 
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
-    else:
-        instance.profile.save()
+
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
