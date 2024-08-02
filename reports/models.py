@@ -1,10 +1,11 @@
+"""Модели приложения reports."""
+import uuid
 from django.db import models
-from django.contrib import admin
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AbstractUser
 from .validators import validate_future_date
+
 
 User = get_user_model()
 
@@ -12,6 +13,7 @@ DEFAULT_AREA = 0
 
 
 class City(models.Model):
+    """Модель города."""
     name = models.CharField(max_length=100,
                             null=False,
                             blank=False,
@@ -21,6 +23,7 @@ class City(models.Model):
         verbose_name_plural = 'Города'
 
     def __str__(self):
+        """Возвращает название города"""
         return self.name
 
 class Warehouse(models.Model):
@@ -257,30 +260,32 @@ class Comment(models.Model):
         return self.text
 
 
-
-
-
 class Profile(models.Model):
+    uuid = models.UUIDField(
+        primary_key=True,
+        editable=False,
+        default=uuid.uuid4,
+        verbose_name='UUID'
+    )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     work_position = models.TextField(
-        max_length=100,
+        max_length=20,
         blank=True,
         verbose_name='Должность'
     )
-    store = models.OneToOneField(
-        Store,
-        on_delete=models.DO_NOTHING,
-        verbose_name='Мебельный салон'
-    )
-
     class Meta:
         verbose_name = 'Допольнительная информация'
+
+    def __str__(self):
+        return f'{self.user.name} - {self.work_position}'
 
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
+    else:
+        instance.profile.save()
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
