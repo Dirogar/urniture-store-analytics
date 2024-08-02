@@ -176,6 +176,9 @@ LOGGING = {
             "backupCount": 5,
             "formatter": "verbose",
         },
+        "console": {
+            "class": "logging.StreamHandler",
+        }
     },
     "formatters": {
         "verbose": {
