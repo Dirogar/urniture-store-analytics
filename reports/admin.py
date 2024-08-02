@@ -7,7 +7,7 @@ from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.utils.translation import gettext, gettext_lazy as _
 
 from django.contrib.auth.models import User
-from .models import Store, Product, Warehouse, ProductCategory, Profile
+from .models import Store, Product, Warehouse, ProductCategory, Profile, City
 
 User = get_user_model()
 
@@ -60,6 +60,8 @@ class StoreAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Warehouse)
-# admin.site.register(Store)
 admin.site.register(Product)
 admin.site.register(ProductCategory)
+admin.site.register(City)
+
+
