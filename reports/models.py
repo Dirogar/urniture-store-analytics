@@ -83,7 +83,8 @@ class Store(models.Model):
         City,
         related_name='cities',
         blank=False,
-        on_delete=models.DO_NOTHING
+        on_delete=models.DO_NOTHING,
+        verbose_name='Город'
     )
 
     class Meta:
