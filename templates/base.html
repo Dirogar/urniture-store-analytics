@@ -40,6 +40,18 @@
         z-index: 1;
         background-color: white;
     }
+    .table th:first-child, .table td:first-child {
+        position: -webkit-sticky; /* Для Safari */
+        position: sticky;
+        left: 0;
+    }
+     .table th:nth-child(2), .table td:nth-child(2) {
+        position: -webkit-sticky; /* Для Safari */
+        position: sticky;
+        left: 90px; /* Ширина первого столбца (поправьте значение, если нужно) */
+        z-index: 0; /* Убедитесь, что фиксированный столбец находится выше других */
+    }
+
     </style>
     {% bootstrap_css %}
 </head>
