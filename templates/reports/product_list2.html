@@ -48,13 +48,13 @@
         <tr>
             <td>{{ product.article }}</td>
             <td>{{ product.name }}</td>
-            <td>{{ product.model }}</td>
-            <td>{{ product.manufacturer }}</td>
-            <td>{{ product.square }}</td>
-            <td>{{ product.category }}</td>
-            <td>{{ product.segment }}</td>
-            <td>{{ product.matrix }}</td>
-            <td ondblclick="makeEditable(this)" data-product="{{ product.article }}" data-field="room_class">{{ product.room_class|default_if_none:"qwe"  }}</td>
+            <td>{{ product.model|default_if_none:"Пусто" }}</td>
+            <td>{{ product.manufacturer|default_if_none:"Пусто" }}</td>
+            <td>{{ product.square|default_if_none:"0" }}</td>
+            <td>{{ product.category|default_if_none:"Пусто" }}</td>
+            <td>{{ product.segment|default_if_none:"Пусто" }}</td>
+            <td>{{ product.matrix|default_if_none:"Пусто" }}</td>
+            <td ondblclick="makeEditable(this)" data-product="{{ product.article }}" data-field="room_class">{{ product.room_class|default_if_none:"Пусто" }}</td>
             {% for warehouse in warehouses %}
                 <td>
                     {% with warehouse_item=warehouse_data|get_item:product.article|get_item:warehouse.id %}
