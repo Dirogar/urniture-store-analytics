@@ -26,6 +26,7 @@ urlpatterns = [
     path("__debug__/", include("debug_toolbar.urls")),
     path('admin/', admin.site.urls),
     path('', auth_views.LoginView.as_view(), name='login'),
+    path('api/', include('api.urls')),
     path('accounts/login/', auth_views.LoginView.as_view(), name='login'),
     path('password_reset/', auth_views.PasswordResetView.as_view(),
          name='password_reset'),

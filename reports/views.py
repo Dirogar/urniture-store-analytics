@@ -17,9 +17,10 @@ from django.urls import reverse, reverse_lazy
 from django.http import JsonResponse
 from django.views.generic.detail import SingleObjectMixin
 from django.views.decorators.csrf import csrf_exempt
-from django.db.models import Q
+from django.db.models import Q, Prefetch, Count
 
-from .models import Store, Comment, User, Product, Warehouse, StoreProduct
+from .models import (Store, Comment, User, Product, Warehouse, StoreProduct,
+                     WarehouseProduct)
 from .forms import CommentForm
 
 
@@ -28,8 +29,7 @@ class ShopProductListView(LoginRequiredMixin, ListView):
     template_name = 'reports/product_list2.html'
     context_object_name = 'products'
     model = Product
-    paginate_by = 100
-
+    paginate_by = 1000
 
     def get_queryset(self):
         """Возвращает связанные данные"""
@@ -48,7 +48,7 @@ class ShopProductListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         """
-        Возвращает связанные данные магазинов-продукутов, складов-продуктов
+        Возвращает связанные данные магазинов-продуктов, складов-продуктов
         """
         context = super().get_context_data(**kwargs)
         user = self.request.user
@@ -57,30 +57,36 @@ class ShopProductListView(LoginRequiredMixin, ListView):
         context['current_sort'] = self.request.GET.get('sort', 'default')
         context['current_order'] = self.request.GET.get('order', 'asc')
 
-        warehouse_data = {}
-        store_data = {}
-        comments_data = {}
+        products = context['products']
 
-        for product in context['products']:
-            warehouse_data[product.article] = {
-                wp.warehouse_id: wp.stock for wp
-                in product.warehouse_products.all()
-            }
-            store_data[product.article] = {sp.store_id: sp for sp in
-                                           product.store_products.all()}
-            for store in context['stores']:
-                comments = Comment.objects.filter(
-                    store=store,
-                    product=product
-                ).order_by('-created_at')
-                if comments.exists():
-                    if product.article not in comments_data:
-                        comments_data[product.article] = {}
-                    comments_data[product.article][store.id] = comments.count()
+        warehouse_data = {
+            product.article: {wp.warehouse_id: wp.stock for wp in
+                              product.warehouse_products.all()}
+            for product in products
+        }
+
+        store_data = {
+            product.article: {sp.store_id: sp for sp in
+                              product.store_products.all()}
+            for product in products
+        }
+
+        comments_data = Comment.objects.filter(product__in=products).values(
+            'product__article', 'store_id'
+        ).annotate(count=Count('id'))
+
+        comments_data_dict = {}
+        for comment in comments_data:
+            article = comment['product__article']
+            store_id = comment['store_id']
+            count = comment['count']
+            if article not in comments_data_dict:
+                comments_data_dict[article] = {}
+            comments_data_dict[article][store_id] = count
 
         context['warehouse_data'] = warehouse_data
         context['store_data'] = store_data
-        context['comments_data'] = comments_data
+        context['comments_data'] = comments_data_dict
 
         return context
 
@@ -96,7 +102,6 @@ class StoreProductCommentListView(LoginRequiredMixin, ListView):
 
     template_name = 'reports/store_product_comments.html'
     context_object_name = 'comments'
-
 
     def get_queryset(self):
         """
@@ -129,7 +134,6 @@ class StoreProductCommentListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         store_id = self.kwargs['store_id']
         product_article = self.kwargs['product_article']
-
 
         store = Store.objects.get(id=store_id)
         product = Product.objects.get(article=product_article)
@@ -224,6 +228,18 @@ class CommentList(LoginRequiredMixin, ListView):
 
 
 @csrf_exempt
+def update_store_info(request) -> JsonResponse:
+    """
+    Обновялет значение info модели Store
+
+    :param request: Запрос на изменение данных
+    :return: Результат выполнения запроса
+    """
+    if request.method == 'POST':
+        data = json.loads(request.body)
+
+
+@csrf_exempt
 def update_store_product(request) -> JsonResponse:
     """
     Добавляет значения в таблицу Store и Product.
@@ -243,6 +259,16 @@ def update_store_product(request) -> JsonResponse:
                 setattr(product, field, value)
                 product.save()
             else:
+                if not StoreProduct.objects.filter(
+                        product__article=product_article,
+                        store_id=store_id
+                ).exists():
+                    product = Product.objects.get(article=product_article)
+                    StoreProduct.objects.create(
+                        product=product,
+                        store_id=store_id,
+                        fact_exhibition=0
+                    )
                 store_product = StoreProduct.objects.get(
                     product__article=product_article, store_id=store_id
                 )

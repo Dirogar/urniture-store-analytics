@@ -53,6 +53,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'reports.apps.ReportsConfig',
     'debug_toolbar',
+    'rest_framework',
+    'api',
 ]
 
 MIDDLEWARE = [
