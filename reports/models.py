@@ -279,7 +279,9 @@ class StoreProduct(models.Model):
     @property
     def deviation(self):
         """Добавляет новое свойство. Вычисляемое поле"""
-        return self.fact_exhibition-self.plan_exhibition
+        if self.plan_exhibition is not None and self.fact_exhibition is not None:
+            return self.fact_exhibition - self.plan_exhibition
+        return 0
 
     def __str__(self):
         """Возвращает название товара и магазина."""
