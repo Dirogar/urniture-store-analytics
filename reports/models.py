@@ -206,7 +206,8 @@ class Product(models.Model):
         max_length=8,
         null=True,
         blank=True,
-        verbose_name='Класс комнаты'
+        verbose_name='Класс комнаты',
+        default='Нет класса'
     )
 
     class Meta:
