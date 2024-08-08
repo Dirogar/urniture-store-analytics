@@ -274,13 +274,11 @@ class StoreProduct(models.Model):
         default=0,
         verbose_name='Факт выставки'
     )
-    deviation = models.IntegerField(
-        null=True,
-        blank=True,
-        default=0,
-        verbose_name='Отклонение'
 
-    )
+    @property
+    def deviation(self):
+        """Добавляет новое свойство. Вычисляемое поле"""
+        return self.fact_exhibition-self.plan_exhibition
 
     def __str__(self):
         """Возвращает название товара и магазина."""
