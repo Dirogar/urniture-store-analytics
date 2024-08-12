@@ -46,5 +46,21 @@ class StoreFilterForm(forms.Form):
             self.fields['store'].choices = [(store.id, store.name) for store in accessible_stores]
 
 
+class CommentFilterForm(forms.Form):
+    STATUS_CHOICES = [
+        ('В работе', 'В работе'),
+        ('Не выполнено', 'Не выполнено'),
+        ('Выполнено', 'Выполнено'),
+        # Добавьте другие статусы по необходимости
+    ]
+
+    show_statuses = forms.MultipleChoiceField(
+        choices=STATUS_CHOICES,
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        label="Отображать комментарии со статусами"
+    )
+
+
 
 

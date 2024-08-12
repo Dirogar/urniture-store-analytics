@@ -21,7 +21,7 @@ from django.db.models import Q, Prefetch, Count
 
 from .models import (Store, Comment, User, Product, Warehouse, StoreProduct,
                      WarehouseProduct)
-from .forms import CommentForm, StoreFilterForm
+from .forms import CommentForm, StoreFilterForm, CommentFilterForm
 
 
 class ShopProductListView(LoginRequiredMixin, ListView):
@@ -220,6 +220,20 @@ class CommentList(LoginRequiredMixin, ListView):
     template_name = 'reports/comments_list.html'
     context_object_name = 'all_comments'
 
+    def get_form(self):
+        """
+        Возвращает экземпляр формы фильтрации.
+        """
+        return CommentFilterForm(self.request.GET or None)
+
+    def get_context_data(self, **kwargs):
+        """
+        Добавляет форму в контекст шаблона.
+        """
+        context = super().get_context_data(**kwargs)
+        context['form'] = self.get_form()
+        return context
+
     def get_queryset(self):
         """
         Возвращает QuerySet с комментариями, включающими связанные данные.
@@ -234,6 +248,12 @@ class CommentList(LoginRequiredMixin, ListView):
         queryset = Comment.objects.select_related(
             'product', 'store'
         ).order_by('-created_at')
+        form = self.get_form()
+
+        if form.is_valid():
+            show_statuses = form.cleaned_data.get('show_statuses', [])
+            if show_statuses:
+                queryset = queryset.filter(status__in=show_statuses)
         return queryset
 
 

@@ -11,7 +11,13 @@
 {% block content %}
     {% if user.is_authenticated %}
 <h1>Комментарии по всем товарам и салонам</h1>
+
 <div class="container-sm text-left" style="background-color:Lavender; border-radius:10px" >
+    <form method="get" class="mb-3">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    <button type="submit" class="btn btn-primary">Применить фильтр</button>
+</form>
         <div class="row align-items-start">
             {% if all_comments %}
                 {% for comment in all_comments %}
