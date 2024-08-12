@@ -21,7 +21,7 @@ from django.db.models import Q, Prefetch, Count
 
 from .models import (Store, Comment, User, Product, Warehouse, StoreProduct,
                      WarehouseProduct)
-from .forms import CommentForm
+from .forms import CommentForm, StoreFilterForm
 
 
 class ShopProductListView(LoginRequiredMixin, ListView):
@@ -34,10 +34,9 @@ class ShopProductListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         """Возвращает связанные данные"""
         user = self.request.user
-        stores = user.store.all()
         queryset = Product.objects.prefetch_related(
             'warehouse_products', 'store_products'
-        ).filter()
+        )
         sort_by = self.request.GET.get('sort', 'article')
         order = self.request.GET.get('order', 'asc')
 
@@ -52,10 +51,21 @@ class ShopProductListView(LoginRequiredMixin, ListView):
         """
         context = super().get_context_data(**kwargs)
         user = self.request.user
-        context['stores'] = user.store.all().order_by('name')
+        stores = user.store.all()
+        form = StoreFilterForm(self.request.GET, accessible_stores=stores)
+
+        if form.is_valid():
+            selected_store_ids = form.cleaned_data['store']
+            if selected_store_ids:
+                stores = stores.filter(id__in=selected_store_ids)
+
+        context['stores'] = stores.order_by('name')
         context['warehouses'] = Warehouse.objects.all()
         context['current_sort'] = self.request.GET.get('sort', 'default')
         context['current_order'] = self.request.GET.get('order', 'asc')
+        context['form'] = form
+
+
 
         products = context['products']
 

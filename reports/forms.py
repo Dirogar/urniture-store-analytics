@@ -2,7 +2,7 @@ from django import forms
 from django.forms import DateInput
 from django.utils import timezone
 from django.core.validators import ValidationError
-from .models import Comment
+from .models import Comment, Store
 
 
 class CommentForm(forms.ModelForm):
@@ -30,6 +30,21 @@ class CommentForm(forms.ModelForm):
                 'Планируемая дата выполнения должна быть в будущем'
             )
         return finish_planned_date
+
+
+class StoreFilterForm(forms.Form):
+    store = forms.MultipleChoiceField(
+        choices=[],
+        required=False,
+        widget=forms.CheckboxSelectMultiple(attrs={'size': 4})
+    )
+
+    def __init__(self, *args, **kwargs):
+        accessible_stores = kwargs.pop('accessible_stores', None)
+        super().__init__(*args, **kwargs)
+        if accessible_stores:
+            self.fields['store'].choices = [(store.id, store.name) for store in accessible_stores]
+
 
 
 
