@@ -62,5 +62,11 @@ class CommentFilterForm(forms.Form):
     )
 
 
+class ArticleFilterForm(forms.Form):
+    article = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={'placeholser': 'Поиск по артикулу'})
+    )
+
 
 

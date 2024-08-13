@@ -21,7 +21,8 @@ from django.db.models import Q, Prefetch, Count
 
 from .models import (Store, Comment, User, Product, Warehouse, StoreProduct,
                      WarehouseProduct)
-from .forms import CommentForm, StoreFilterForm, CommentFilterForm
+from .forms import (CommentForm, StoreFilterForm, CommentFilterForm,
+                    ArticleFilterForm)
 
 
 class ShopProductListView(LoginRequiredMixin, ListView):
@@ -42,6 +43,11 @@ class ShopProductListView(LoginRequiredMixin, ListView):
 
         if order == 'desc':
             sort_by = f'-{sort_by}'
+
+        article = self.request.GET.get('article', '')
+        if article:
+            queryset = queryset.filter(article__icontains=article)
+
         queryset = queryset.order_by(sort_by)
         return queryset
 
@@ -53,17 +59,19 @@ class ShopProductListView(LoginRequiredMixin, ListView):
         user = self.request.user
         stores = user.store.all()
         form = StoreFilterForm(self.request.GET, accessible_stores=stores)
-
         if form.is_valid():
             selected_store_ids = form.cleaned_data['store']
             if selected_store_ids:
                 stores = stores.filter(id__in=selected_store_ids)
+
+        article_filter_form = ArticleFilterForm(self.request.GET or None)
 
         context['stores'] = stores.order_by('name')
         context['warehouses'] = Warehouse.objects.all()
         context['current_sort'] = self.request.GET.get('sort', 'default')
         context['current_order'] = self.request.GET.get('order', 'asc')
         context['form'] = form
+        context['article_filter_form'] = article_filter_form
 
 
 
