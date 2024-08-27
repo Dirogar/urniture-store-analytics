@@ -8,38 +8,66 @@ function makeEditable(td) {
 
 function updateData(input) {
     let td = input.parentElement;
+    let originalValue = td.innerText;
     let newValue = input.value;
     let product = td.getAttribute('data-product');
     let store = td.getAttribute('data-store');
     let field = td.getAttribute('data-field');
 
-    // Отправка данных на сервер через AJAX
-    fetch(updateStoreProductUrl, {
-        method: 'POST',
+    let utl, body;
+
+    if (field == 'room_class') {
+        method = 'PATCH'
+        url = "/api/product/" + product + "/";
+        body = JSON.stringify({
+            [field]: newValue,
+            product_article: product
+        })
+    } else {
+        method = 'POST';
+        url = "/api/storeproduct/";
+        body = JSON.stringify({
+            [field]: newValue,
+            store: store,
+            product_article: product
+        })
+    }
+    fetch(url, {
+        method: method,
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRFToken': csrfToken
+            'X-CSRFToken': getCookie('csrftoken')
         },
-        body: JSON.stringify({
-            product: product,
-            store: store,
-            field: field,
-            value: newValue
-        })
+        body: body
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            td.innerText = newValue;
-            alert('Всё ок');
+    .then(response => {
+        if (response.ok) {
+            td.innerHTML = newValue;
         } else {
-            alert('Ошибка обновления данных');
-            td.innerText = currentValue;
+            throw new Error('Ошибка при обновлении данных');
         }
     })
+    .then(data => {
+        td.innerHTML = newValue;
+    })
     .catch(error => {
-        console.error('Error:', error);
-        alert('Ошибка обновления данных');
-        td.innerText = currentValue;
+        console.error('Ошибка', error);
+        td.innerHTML = originalValue;
+        alert('Не удалось сохранить изменения');
     });
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        let cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            let cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
 }
