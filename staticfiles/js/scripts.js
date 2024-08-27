@@ -31,6 +31,7 @@ function updateData(input) {
     .then(data => {
         if (data.success) {
             td.innerText = newValue;
+            alert('Всё ок');
         } else {
             alert('Ошибка обновления данных');
             td.innerText = currentValue;

@@ -278,46 +278,6 @@ def update_store_info(request) -> JsonResponse:
 
 
 @csrf_exempt
-def update_store_product(request) -> JsonResponse:
-    """
-    Добавляет значения в таблицу Store и Product.
-
-    :param request: Запрос на добавление/изменение данных
-    :return: Json с результатом выполнения запроса
-    """
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        product_article = data.get('product')
-        store_id = data.get('store')
-        value = data.get('value')
-        field = data.get('field')
-        try:
-            if field == 'room_class':
-                product = Product.objects.get(article=product_article)
-                setattr(product, field, value)
-                product.save()
-            else:
-                if not StoreProduct.objects.filter(
-                        product__article=product_article,
-                        store_id=store_id
-                ).exists():
-                    product = Product.objects.get(article=product_article)
-                    StoreProduct.objects.create(
-                        product=product,
-                        store_id=store_id,
-                        fact_exhibition=0
-                    )
-                store_product = StoreProduct.objects.get(
-                    product__article=product_article, store_id=store_id
-                )
-                setattr(store_product, field, value)
-                store_product.save()
-            return JsonResponse({'success': True})
-        except Exception as e:
-            raise e
-
-
-@csrf_exempt
 def change_comment_status(request) -> JsonResponse:
     """
     Возвращает новый статус комментария.

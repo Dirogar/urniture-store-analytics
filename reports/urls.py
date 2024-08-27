@@ -2,8 +2,7 @@ from django.urls import path
 
 from .views import (ShopProductListView, CommentList,
                     StoreProductCommentListView, AddCommentView,
-                    update_store_product, change_comment_status,
-                    update_store_info)
+                    change_comment_status, update_store_info)
 
 app_name = 'reports'
 
@@ -20,11 +19,6 @@ urlpatterns = [
         'comments/<int:store_id>/<str:product_article>/add',
         AddCommentView.as_view(),
          name='add_comment'
-    ),
-    path(
-        'api/update_store_product/',
-        update_store_product,
-        name='update_store_product'
     ),
     path(
         'api/change_comment_status/',
