@@ -9,13 +9,13 @@
 <hr>
 <a type="button" class="btn btn-primary" href="{% url 'reports:all_comments' %}">Все комментарии</a>
 <div id="selectors" class="container d-flex flex-wrap justify-content-between align-items-center">
-    <!-- Селектор магазина -->
-    <div class="dropdown col-md-4 col-sm-12 mb-3">
-        <button class="btn btn-outline-secondary dropdown-toggle w-100" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-            Выберите магазин
-        </button>
-        <ul class="dropdown-menu p-3 w-100" aria-labelledby="dropdownMenuButton1">
-            <form id="storeForm" method="get">
+    <form method="get" class="d-flex flex-wrap w-100">
+        <!-- Селектор магазина -->
+        <div class="dropdown col-md-4 col-sm-12 mb-3">
+            <button class="btn btn-outline-secondary dropdown-toggle w-100" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                Выберите магазин
+            </button>
+            <ul class="dropdown-menu p-3 w-100" aria-labelledby="dropdownMenuButton1">
                 <div class="form-check">
                     {% for field in form %}
                         <label class="form-check-label">
@@ -23,19 +23,20 @@
                         </label>
                     {% endfor %}
                 </div>
-                <button type="submit" class="btn btn-primary mt-3 w-100">Применить</button>
-            </form>
-        </ul>
-    </div>
+            </ul>
+        </div>
 
-    <!-- Поле ввода артикула -->
-    <div class="col-md-4 col-sm-12 mb-3">
-        <form method="get" class="d-flex">
+        <!-- Поле ввода артикула -->
+        <div class="col-md-4 col-sm-12 mb-3">
             {% csrf_token %}
-            <input type="text" name="article" class="form-control me-2" placeholder="Поиск по артикулу">
-            <button type="submit" class="btn btn-primary">Поиск</button>
-        </form>
-    </div>
+            <input type="text" name="article" class="form-control me-2" placeholder="Поиск по артикулу" value="{{ request.GET.article }}">
+        </div>
+
+        <!-- Кнопка применения -->
+        <div class="col-md-4 col-sm-12 mb-3">
+            <button type="submit" class="btn btn-primary w-100">Применить</button>
+        </div>
+    </form>
 </div>
 
 
