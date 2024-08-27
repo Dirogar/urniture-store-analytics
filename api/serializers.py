@@ -15,3 +15,10 @@ class StoreProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = StoreProduct
         fields = 'product_article', 'store', 'plan_exhibition'
+
+
+class ProductSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Product
+        fields = ('article', 'room_class',)
