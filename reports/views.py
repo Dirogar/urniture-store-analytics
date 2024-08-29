@@ -52,7 +52,7 @@ class ShopProductListView(LoginRequiredMixin, ListView):
         if matrix_form.is_valid():
             matrix_value = matrix_form.cleaned_data.get('matrix')
             if matrix_value:
-                queryset = queryset.filter(matrix__isnull=False)
+                queryset = queryset.filter(matrix__isnull=False).exclude(matrix__exact='')
 
 
         queryset = queryset.order_by(sort_by)
