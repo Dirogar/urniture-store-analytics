@@ -8,6 +8,7 @@
 <h1 class="text-dark" style="margin-left: 20px; padding-top: 8px; margin-bottom: -2px;">Матрица</h1>
 <hr>
 <a type="button" class="btn btn-primary" href="{% url 'reports:all_comments' %}">Все комментарии</a>
+<a type="button" class="btn btn-primary" href="https://forms.yandex.ru/cloud/66b488d02530c200152fca8d/">Отзывы и предложения</a>
 <div id="selectors" class="container d-flex flex-wrap justify-content-between align-items-center">
     <form method="get" class="d-flex flex-wrap w-100">
         <!-- Селектор магазина -->
@@ -17,13 +18,21 @@
             </button>
             <ul class="dropdown-menu p-3 w-100" aria-labelledby="dropdownMenuButton1">
                 <div class="form-check">
-                    {% for field in form %}
+                    {% for field in store_form %}
                         <label class="form-check-label">
                             {{ field }}
                         </label>
                     {% endfor %}
                 </div>
             </ul>
+        </div>
+        <!-- Селектор матрицы -->
+
+        <div class="col-md-4 col-sm-12 mb-3">
+            <div class="form-check">
+                Признак матрица
+                {{ matrix_form.matrix }}
+            </div>
         </div>
 
         <!-- Поле ввода артикула -->

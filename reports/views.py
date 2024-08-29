@@ -22,7 +22,7 @@ from django.db.models import Q, Prefetch, Count
 from .models import (Store, Comment, User, Product, Warehouse, StoreProduct,
                      WarehouseProduct)
 from .forms import (CommentForm, StoreFilterForm, CommentFilterForm,
-                    ArticleFilterForm)
+                    ArticleFilterForm, MatrixFilterForm)
 
 
 class ShopProductListView(LoginRequiredMixin, ListView):
@@ -48,6 +48,13 @@ class ShopProductListView(LoginRequiredMixin, ListView):
         if article:
             queryset = queryset.filter(article__icontains=article)
 
+        matrix_form = MatrixFilterForm(self.request.GET)
+        if matrix_form.is_valid():
+            matrix_value = matrix_form.cleaned_data.get('matrix')
+            if matrix_value:
+                queryset = queryset.filter(matrix__isnull=False)
+
+
         queryset = queryset.order_by(sort_by)
         return queryset
 
@@ -58,20 +65,22 @@ class ShopProductListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         stores = user.store.all()
-        form = StoreFilterForm(self.request.GET, accessible_stores=stores)
-        if form.is_valid():
-            selected_store_ids = form.cleaned_data['store']
+        store_form = StoreFilterForm(self.request.GET, accessible_stores=stores)
+        if store_form.is_valid():
+            selected_store_ids = store_form.cleaned_data['store']
             if selected_store_ids:
                 stores = stores.filter(id__in=selected_store_ids)
 
+        matrix_form = MatrixFilterForm(self.request.GET or None)
         article_filter_form = ArticleFilterForm(self.request.GET or None)
 
         context['stores'] = stores.order_by('name')
         context['warehouses'] = Warehouse.objects.all()
         context['current_sort'] = self.request.GET.get('sort', 'default')
         context['current_order'] = self.request.GET.get('order', 'asc')
-        context['form'] = form
+        context['store_form'] = store_form
         context['article_filter_form'] = article_filter_form
+        context['matrix_form'] = matrix_form
 
 
 

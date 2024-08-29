@@ -14,9 +14,9 @@ class CommentForm(forms.ModelForm):
             'finish_planned_date': DateInput(
                 format=('%Y-%m-%d'),
                 attrs={
-                       'type': 'date',
-                       'placeholder': 'Select a date',
-                       'class': 'form-control'
+                    'type': 'date',
+                    'placeholder': 'Select a date',
+                    'class': 'form-control'
                 }
             ),
         }
@@ -43,7 +43,16 @@ class StoreFilterForm(forms.Form):
         accessible_stores = kwargs.pop('accessible_stores', None)
         super().__init__(*args, **kwargs)
         if accessible_stores:
-            self.fields['store'].choices = [(store.id, store.name) for store in accessible_stores]
+            self.fields['store'].choices = [(store.id, store.name) for store in
+                                            accessible_stores]
+
+
+class MatrixFilterForm(forms.Form):
+    matrix = forms.BooleanField(
+        required=False,
+        widget=forms.CheckboxInput(attrs={'size': 4})
+    )
+
 
 
 class CommentFilterForm(forms.Form):
@@ -67,6 +76,3 @@ class ArticleFilterForm(forms.Form):
         required=False,
         widget=forms.TextInput(attrs={'placeholser': 'Поиск по артикулу'})
     )
-
-
-
