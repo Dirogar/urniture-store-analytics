@@ -7,6 +7,9 @@
 Столбцы - это Склады, Магазины (таблицы Warehouse, Store)
 """
 import json
+import os
+from dotenv import load_dotenv
+
 from django.views.generic import (
     ListView, CreateView, UpdateView, DeleteView, DetailView, View
 )
@@ -24,6 +27,7 @@ from .models import (Store, Comment, User, Product, Warehouse, StoreProduct,
 from .forms import (CommentForm, StoreFilterForm, CommentFilterForm,
                     ArticleFilterForm, MatrixFilterForm)
 
+load_dotenv()
 
 class ShopProductListView(LoginRequiredMixin, ListView):
     """Отображает таблицу с данными"""
