@@ -8,6 +8,7 @@ def get_item(queryset, key):
     return queryset.get(key)
 
 
+# TODO Изменить дефолтное значение с 0 на default
 @register.filter
 def default_if_none(queryset, key):
     return queryset or 0

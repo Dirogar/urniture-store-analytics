@@ -48,7 +48,7 @@
                     </div>
                 </div>
                 <!-- Ссылка на возврат к списку продуктов -->
-                <a href="{% url 'reports:products' %}" class="btn btn-secondary">Назад к списку продуктов</a>
+                <a href="{{ previous_url }}" class="btn btn-secondary">Назад к списку продуктов</a>
             </div>
         </div>
     {% endif %}
