@@ -25,7 +25,6 @@ DB_SCHEMA = os.getenv('DB_SCHEMA')
 SECRET_KEY = os.getenv('SECRET_KEY')
 CSRF_TRUSTED_DOMAIN = os.getenv('CSRF_TRUSTED_DOMAIN')
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -40,7 +39,7 @@ DEBUG = os.getenv('DEBUG_MODE')
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
-INTERNAL_IPS = ["127.0.0.1", "localhost",]
+INTERNAL_IPS = ["127.0.0.1", "localhost", ]
 # Application definition
 
 INSTALLED_APPS = [
@@ -144,8 +143,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-STATICFILES_DIRS = [BASE_DIR / 'static_dev',]
-
+STATICFILES_DIRS = [BASE_DIR / 'static_dev', ]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -154,19 +152,18 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = 'reports:products'
 
-
 CSRF_TRUSTED_ORIGINS = [
     CSRF_TRUSTED_DOMAIN,
 ]
 
 # Email settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST= os.getenv('EMAIL_HOST')
+EMAIL_HOST = os.getenv('EMAIL_HOST')
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 587
 EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS')
-ADMINS=(
+ADMINS = (
     ('Max', EMAIL_HOST_USER),
 )
 MANAGERS = ADMINS
@@ -181,7 +178,7 @@ LOGGING = {
             "level": os.getenv("DJANGO_LOG_LEVEL", "DEBUG"),
             "class": "logging.handlers.RotatingFileHandler",
             "filename": "django-main.log",
-            "maxBytes": 1024 - 1024 - 5, #5 MB
+            "maxBytes": 1024 - 1024 - 5,  # 5 MB
             "backupCount": 5,
             "formatter": "verbose",
         },
@@ -218,3 +215,4 @@ REST_FRAMEWORK = {
 #         'rest_framework.authentication.TokenAuthentication',
 #     ]
 }
+

@@ -54,6 +54,20 @@ class MatrixFilterForm(forms.Form):
     )
 
 
+class RoomClassFilterForm(forms.Form):
+    room_class = forms.MultipleChoiceField(
+        choices=[],
+        required=False,
+        widget=forms.CheckboxSelectMultiple(attrs={'size': 4})
+    )
+
+    def __init__(self, *args, **kwargs):
+        unique_room_classes = kwargs.pop('unique_room_classes', None)
+        super().__init__(*args, **kwargs)
+        if unique_room_classes:
+            self.fields['room_class'].choices = [(room_class, room_class) for room_class in unique_room_classes]
+        print(f"Choices: {self.fields['room_class'].choices}")
+
 
 class CommentFilterForm(forms.Form):
     STATUS_CHOICES = [

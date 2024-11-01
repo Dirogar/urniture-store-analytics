@@ -29,12 +29,13 @@ from .forms import (CommentForm, StoreFilterForm, CommentFilterForm,
 
 load_dotenv()
 
+
 class ShopProductListView(LoginRequiredMixin, ListView):
     """Отображает таблицу с данными"""
     template_name = 'reports/product_list2.html'
     context_object_name = 'products'
     model = Product
-    paginate_by = 1000
+    paginate_by = os.getenv('PAGINATE_BY')
 
     def get_queryset(self):
         """Возвращает связанные данные"""
@@ -56,8 +57,8 @@ class ShopProductListView(LoginRequiredMixin, ListView):
         if matrix_form.is_valid():
             matrix_value = matrix_form.cleaned_data.get('matrix')
             if matrix_value:
-                queryset = queryset.filter(matrix__isnull=False).exclude(matrix__exact='')
-
+                queryset = queryset.filter(matrix__isnull=False).exclude(
+                    matrix__exact='')
 
         queryset = queryset.order_by(sort_by)
         return queryset
@@ -69,7 +70,8 @@ class ShopProductListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         stores = user.store.all()
-        store_form = StoreFilterForm(self.request.GET, accessible_stores=stores)
+        store_form = StoreFilterForm(self.request.GET,
+                                     accessible_stores=stores)
         if store_form.is_valid():
             selected_store_ids = store_form.cleaned_data['store']
             if selected_store_ids:
@@ -85,8 +87,7 @@ class ShopProductListView(LoginRequiredMixin, ListView):
         context['store_form'] = store_form
         context['article_filter_form'] = article_filter_form
         context['matrix_form'] = matrix_form
-
-
+        context['previous_url'] = self.request.META.get('HTTP_REFERER', '/')
 
         products = context['products']
 
