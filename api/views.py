@@ -7,7 +7,7 @@ from rest_framework import viewsets
 
 from reports.models import Store, Product, Warehouse
 
-from .serializers import ProductSerializer, WarehouseSerializer
+from .serializers import ProductSerializer, WarehouseSerializer, StoreSerializer
 
 
 class ProductViewSet(viewsets.ModelViewSet):
@@ -31,3 +31,4 @@ class StoreViewSet(viewsets.ModelViewSet):
     """Возвращает информацию о магазинах."""
 
     queryset = Store.objects.all()
+    serializer_class = StoreSerializer
