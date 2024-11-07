@@ -5,9 +5,9 @@
 """
 from rest_framework import viewsets
 
-from reports.models import Store, Product
+from reports.models import Store, Product, Warehouse
 
-from .serializers import ProductSerializer
+from .serializers import ProductSerializer, WarehouseSerializer
 
 
 class ProductViewSet(viewsets.ModelViewSet):
@@ -17,6 +17,14 @@ class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
     lookup_field = 'article'
     http_method_names = ['get', 'post']
+
+
+class WarehouseViewSet(viewsets.ModelViewSet):
+    """Возвращает информацию о складах."""
+
+    queryset = Warehouse.objects.all()
+    serializer_class = WarehouseSerializer
+    http_method_names = ['get']
 
 
 class StoreViewSet(viewsets.ModelViewSet):
