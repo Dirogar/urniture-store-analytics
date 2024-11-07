@@ -77,3 +77,10 @@ class ProductSerializer(serializers.ModelSerializer):
     def get_comments_count(self, obj):
         comments = Comment.objects.filter(product=obj)
         return comments.count()
+
+
+
+class WarehouseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Warehouse
+        fields = '__all__'
