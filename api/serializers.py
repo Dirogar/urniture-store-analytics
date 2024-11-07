@@ -40,6 +40,7 @@ class StoreSerializer(serializers.ModelSerializer):
 
 class StoreProductSerializer(serializers.ModelSerializer):
     store = StoreSerializer(read_only=True)
+
     class Meta:
         model = StoreProduct
         exclude = ('id',)
@@ -79,8 +80,13 @@ class ProductSerializer(serializers.ModelSerializer):
         return comments.count()
 
 
-
 class WarehouseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Warehouse
+        fields = '__all__'
+
+
+class StoreSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Store
         fields = '__all__'
