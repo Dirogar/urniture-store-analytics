@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'reports.apps.ReportsConfig',
     'debug_toolbar',
     'rest_framework',
+    'drf_yasg',
     'rest_framework.authtoken',
     'django_filters',
     'api',
