@@ -6,7 +6,7 @@ from .views import ProductViewSet, WarehouseViewSet, StoreViewSet
 
 
 v1_router = DefaultRouter()
-v1_router.register(r'product', ProductViewSet, basename='product')
+v1_router.register(r'products', ProductViewSet, basename='products')
 v1_router.register(r'warehouses', WarehouseViewSet, basename='warehouses')
 v1_router.register(r'stores', StoreViewSet, basename='stores')
 

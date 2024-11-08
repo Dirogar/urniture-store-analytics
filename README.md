@@ -61,21 +61,23 @@ source venv/bin/activate`
 ## Основные конечные точки API
 ### Products
 #### Запрос
-- **GET** `/api/v1/products/` - получение списка продуктов, их кол-во на
-складе, кол-во комментариев
-#### Пример ответа
-```
-GET /api/v1/products/?matrix=True&stores=1,2,6&room_class=Г 6,Г 7
-```
+- **GET** `/api/v1/products/` - получение списка продуктов, их кол-во на складе, кол-во комментариев
+- **GET** `/api/v1/products/?matrix=True&stores=1,2,6&room_class=Г 6,Г 7` - Поиск товара по ключевым значениям
+- **PATCH** `/api/v1/products/<product_article>` - Обновление товара. Возможные поля для именения: **room_class**
+
 **Возможные параметры фильтрации:**
 
 - `matrix` (bool): Фильтрация по матрице. Принимает значения `True` или `False`.
 - `stores` (list[int]): Список идентификаторов магазинов через запятую. Например, `1,2,6`.
 - `room_class` (list[string]): Список классов комнат через запятую. Например, `Г 6,Г 7`.
 
-**Пример ответа:**
+**Пример:**
 
+```request
+GET /api/v1/products/
+```
 ```json
+
 {
    "count": 1,
     "next": "string",
@@ -113,7 +115,7 @@ GET /api/v1/products/?matrix=True&stores=1,2,6&room_class=Г 6,Г 7
 }
 ```
 ### Warehouses
-#### Запрос
+#### Запросы
 - **GET** `/api/v1/warehouses/` - получение списка складов
 #### Пример ответа
 ```
