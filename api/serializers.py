@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.serializers import ValidationError
 
 from reports.models import (StoreProduct, Comment, Store, Product, Warehouse,
                             WarehouseProduct)
@@ -60,6 +61,9 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = '__all__'
+        read_only_fields = ['article', 'name', 'model', 'manufacturer',
+                            'square',
+                            'segment', 'matrix', 'category', 'warehouses']
 
     def get_warehouses(self, obj):
         warehouse_products = WarehouseProduct.objects.filter(product=obj)
@@ -78,6 +82,12 @@ class ProductSerializer(serializers.ModelSerializer):
     def get_comments_count(self, obj):
         comments = Comment.objects.filter(product=obj)
         return comments.count()
+
+
+class StoreProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StoreProduct
+        fields = ('plan_exhibition',)
 
 
 class WarehouseSerializer(serializers.ModelSerializer):
