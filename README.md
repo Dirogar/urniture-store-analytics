@@ -63,7 +63,7 @@ source venv/bin/activate`
 #### Запрос
 - **GET** `/api/v1/products/` - получение списка продуктов, их кол-во на складе, кол-во комментариев
 - **GET** `/api/v1/products/?matrix=True&stores=1,2,6&room_class=Г 6,Г 7` - Поиск товара по ключевым значениям
-- **PATCH** `/api/v1/products/<product_article>` - Обновление товара. Возможные поля для именения: **room_class**
+- **PATCH** `/api/v1/products/<product_article>/` - Обновление товара. Возможные поля для именения: **room_class**
 
 **Возможные параметры фильтрации:**
 
@@ -114,6 +114,24 @@ GET /api/v1/products/
     ]
 }
 ```
+
+### StoreProduct
+#### Запрос
+- **PATCH** `/api/v1/storeproduct/<store_id>/<product_article>/` - Обновление товара в магазине. Возможные поля для именения: **plan_exhibition**
+
+**Пример:**
+
+```request
+GET /api/v1/storeproduct/1/00001234/
+```
+
+```json
+
+{
+  "plan_exhibition": 5
+}
+```
+
 ### Warehouses
 #### Запросы
 - **GET** `/api/v1/warehouses/` - получение списка складов
