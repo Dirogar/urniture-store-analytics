@@ -343,3 +343,12 @@ class Comment(models.Model):
     def __str__(self):
         """Возвращает название поля."""
         return self.text
+
+
+class DataUpdate(models.Model):
+    last_update = models.DateTimeField(blank=True, null=True)
+    class Meta:
+        verbose_name = 'Дата актуальности'
+
+    def __str__(self):
+        return f'Дата актуальности данных: {self.last_update}'
