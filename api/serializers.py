@@ -57,6 +57,7 @@ class ProductSerializer(serializers.ModelSerializer):
     warehouses = serializers.SerializerMethodField()
     stores = serializers.SerializerMethodField()
     comments_count = serializers.SerializerMethodField()
+    category = serializers.StringRelatedField()
 
     class Meta:
         model = Product
