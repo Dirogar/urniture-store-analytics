@@ -202,13 +202,6 @@ class Product(models.Model):
         null=True,
         verbose_name='Матрица'
     )
-    room_class = models.CharField(
-        max_length=8,
-        null=True,
-        blank=True,
-        verbose_name='Класс комнаты',
-        default='Нет класса'
-    )
 
     class Meta:
         """Русское название модели."""
@@ -219,6 +212,25 @@ class Product(models.Model):
     def __str__(self):
         """Возвращает название поля."""
         return self.name
+
+
+class ProductMutableData(models.Model):
+    article = models.ForeignKey(
+        Product,
+        to_field='article',
+        on_delete=models.DO_NOTHING,
+        verbose_name='Артикул',
+        related_name='product',
+        null=True,
+        blank=True
+    )
+    room_class = models.CharField(
+        max_length=8,
+        null=True,
+        blank=True,
+        verbose_name='Класс комнаты',
+        default='Нет класса'
+    )
 
 
 class WarehouseProduct(models.Model):
