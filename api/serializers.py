@@ -96,9 +96,12 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class StoreProductSerializer(serializers.ModelSerializer):
+    store = serializers.StringRelatedField()
+    product = serializers.StringRelatedField()
     class Meta:
         model = StoreProduct
-        fields = ('plan_exhibition',)
+        fields = '__all__'
+        read_only_fields = 'store', 'product', 'fact_exhibition'
 
 
 class WarehouseSerializer(serializers.ModelSerializer):

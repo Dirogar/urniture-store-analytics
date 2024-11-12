@@ -12,5 +12,5 @@ v1_router.register(r'stores', StoreViewSet, basename='stores')
 
 urlpatterns = [
     path('v1/', include(v1_router.urls)),
-    path('v1/storeproduct/<int:store_id>/<str:product_article>/', StoreProductViewSet.as_view({'patch': 'partial_update'}))
+    path('v1/storeproduct/<int:store_id>/<str:product_article>/', StoreProductViewSet.as_view({'patch': 'partial_update', 'post': 'create'}))
 ]
