@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.serializers import ValidationError
 
 from reports.models import (StoreProduct, Comment, Store, Product, Warehouse,
-                            WarehouseProduct)
+                            WarehouseProduct, ProductMutableData)
 
 
 class StoreProductSerializer(serializers.ModelSerializer):
@@ -58,6 +58,7 @@ class ProductSerializer(serializers.ModelSerializer):
     stores = serializers.SerializerMethodField()
     comments_count = serializers.SerializerMethodField()
     category = serializers.StringRelatedField()
+    room_class = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
@@ -83,8 +84,15 @@ class ProductSerializer(serializers.ModelSerializer):
             } for sp in store_products}
 
     def get_comments_count(self, obj):
+        """Получение кол-ва комментариев."""
         comments = Comment.objects.filter(product=obj)
         return comments.count()
+
+    def get_room_class(self, obj):
+        """Получает данные из связанной таблицы ProductMutable по артикулу."""
+        mutable_data = ProductMutableData.objects.filter(article=obj).first()
+        return mutable_data.room_class if mutable_data else "Нет класса"
+
 
 
 class StoreProductSerializer(serializers.ModelSerializer):

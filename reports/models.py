@@ -215,7 +215,7 @@ class Product(models.Model):
 
 
 class ProductMutableData(models.Model):
-    article = models.ForeignKey(
+    article = models.OneToOneField(
         Product,
         to_field='article',
         on_delete=models.DO_NOTHING,
