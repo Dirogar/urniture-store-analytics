@@ -69,6 +69,7 @@ class ProductSerializer(serializers.ModelSerializer):
     def get_warehouses(self, obj):
         warehouse_products = WarehouseProduct.objects.filter(product=obj)
         return {wp.warehouse.name: {
+            'id': wp.warehouse_id,
             'stock': wp.stock}
             for wp in warehouse_products}
 
@@ -76,6 +77,7 @@ class ProductSerializer(serializers.ModelSerializer):
         store_products = StoreProduct.objects.filter(product=obj)
         return {
             sp.store.name: {
+                'id': sp.store_id,
                 'plan_exibition': sp.plan_exhibition,
                 'fact_exhibition': sp.fact_exhibition
             } for sp in store_products}
