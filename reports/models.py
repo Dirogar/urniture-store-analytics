@@ -215,14 +215,11 @@ class Product(models.Model):
 
 
 class ProductMutableData(models.Model):
-    article = models.OneToOneField(
-        Product,
-        to_field='article',
-        on_delete=models.DO_NOTHING,
-        verbose_name='Артикул',
-        related_name='product',
-        null=True,
-        blank=True
+    article = models.CharField(
+        primary_key=True,
+        max_length=16,
+        null=False,
+        verbose_name='Артикул'
     )
     room_class = models.CharField(
         max_length=8,
