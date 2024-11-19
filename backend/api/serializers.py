@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.serializers import ValidationError
 
-from backend.reports.models import (StoreProduct, Comment, Store, Product, Warehouse,
+from reports.models import (StoreProduct, Comment, Store, Product, Warehouse,
                                     WarehouseProduct)
 
 

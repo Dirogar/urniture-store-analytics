@@ -43,6 +43,8 @@ INTERNAL_IPS = ["127.0.0.1", "localhost", ]
 # Application definition
 
 INSTALLED_APPS = [
+    'reports.apps.ReportsConfig',
+    'api.apps.ApiConfig',
     'django_bootstrap5',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -50,14 +52,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'reports.apps.ReportsConfig',
     'debug_toolbar',
     'rest_framework',
     'corsheaders',
     'drf_yasg',
     'rest_framework.authtoken',
     'django_filters',
-    'api',
 ]
 
 MIDDLEWARE = [

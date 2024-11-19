@@ -8,7 +8,7 @@ from rest_framework.response import Response
 
 from django.shortcuts import get_object_or_404
 
-from backend.reports.models import Store, Product, Warehouse, StoreProduct
+from reports.models import Store, Product, Warehouse, StoreProduct
 
 from .serializers import ProductSerializer, WarehouseSerializer, \
     StoreSerializer, StoreProductSerializer
