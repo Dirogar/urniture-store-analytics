@@ -90,14 +90,15 @@ class ProductSerializer(serializers.ModelSerializer):
 
     def get_room_class(self, obj):
         """Получает данные из связанной таблицы ProductMutable по артикулу."""
-        mutable_data = ProductMutableData.objects.filter(article=obj).first()
+        mutable_data = ProductMutableData.objects.filter(
+            article=obj.article).first()
         return mutable_data.room_class if mutable_data else "Нет класса"
-
 
 
 class StoreProductSerializer(serializers.ModelSerializer):
     store = serializers.StringRelatedField()
     product = serializers.StringRelatedField()
+
     class Meta:
         model = StoreProduct
         fields = '__all__'
