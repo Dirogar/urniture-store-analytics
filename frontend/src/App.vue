@@ -39,7 +39,7 @@
                  class="searchTerm"
                  v-model="searchTerm"
                  placeholder="Поиск по артикулу" />
-          <button type="submit" class="searchButton" @click="fetchData">
+          <button type="submit" class="searchButton" @click="handleFetchData">
             <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
           </button>
         </div>
@@ -134,11 +134,11 @@
 import axios from 'axios';
 import CommentButon from "@/CommentButon.vue";
 import logo from './logofull.png';
-import Buttons from "@/components/Buttons.vue";
 import {ref} from "vue";
+import {fetchData} from "./FetchData.vue";
 
 export default {
-  components: {Buttons, CommentButon },
+  components: {CommentButon},
   data() {
     return {
       isOpenFilter: false,
@@ -159,8 +159,8 @@ export default {
       currentPageNew: 2, // Текущая страница данных
       isLoadingData: false, // Индикатор загрузки
       hasMoreData: true,
-      currentSort:' ',
-      currentSortDir:ref('asc')
+      currentSort: ' ',
+      currentSortDir: ref('asc')
 
     };
   },
@@ -209,11 +209,9 @@ export default {
     },
   },
   created() {
-    this.fetchData();
-    this.fetchStores();
-    this.fetchWarehouses();
+    this.handleFetchData(this.searchTerm);
     this.isLoading = true;  // Включаем заглушку
-    Promise.all([this.fetchData(), this.fetchStores(), this.fetchWarehouses()])
+    Promise.all([this.fetchStores(), this.fetchWarehouses()])
         .finally(() => {
           console.log('Все данные загружены');  // Отладочное сообщение
           this.isLoading = false;  // Отключаем заглушку
@@ -241,29 +239,14 @@ export default {
         this.currentSortDir = 'asc';
       }
     },
-    fetchData() {
-      if(!this.searchTerm.trim()){
-        return axios.get('http://localhost:8000/api/v1/products/')
-            .then(res => {
-              this.product2 = res.data.results;
-              console.log(this.product2);
-            })
-            .catch(err => console.error("Product fetch error:", err));
+    //Товары
+    async handleFetchData() {
+      try {
+        const data = await fetchData(this.searchTerm); // Ожидаем завершения fetchData
+        this.product2 = data || []; // Записываем результат в product2
+      } catch (error) {
+        console.error("Ошибка при загрузке данных:", error);
       }
-      else{
-        console.log(this.searchTerm);
-            return axios.get(`http://localhost:8000/api/v1/products/${this.searchTerm.trim()}/`)
-            .then(res => {
-              this.product2 = [res.data];
-              console.log("фильтрованный список", this.product2);
-            })
-
-            .catch(err => {
-              console.log(err);
-            })
-
-      }
-
     },
     fetchStores() {
       return axios.get('http://localhost:8000/api/v1/stores/')
@@ -370,9 +353,6 @@ export default {
         }
 
       }
-
-
-
   }
 };
 </script>
