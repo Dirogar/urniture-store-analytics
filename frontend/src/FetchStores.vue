@@ -2,13 +2,15 @@
 <script>
 import axios from "axios";
 
-export const fetchStores = (setStores, setStoreNames) => axios.get("http://localhost:8000/api/v1/stores/")
+export const fetchStores = () => axios.get("http://localhost:8000/api/v1/stores/")
     .then(res => {
       const stores = res.data.results;
       const storeNames = stores.map(item => item.name).sort();
-      setStores(stores); // Передаем данные обратно через функции
-      setStoreNames(storeNames);
+      return {stores, storeNames}; // Возвращаем объект с данными
     })
-    .catch(err => console.error("Stores fetch error:", err));
+    .catch(err => {
+      console.error("Stores fetch error:", err);
+      throw err; // Пробрасываем ошибку для обработки
+    });
 
 </script>

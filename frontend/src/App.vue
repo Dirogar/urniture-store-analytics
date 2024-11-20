@@ -71,16 +71,16 @@
           <th @click="sortBy('category')">Категория <span v-if="currentSort ==='category'">{{currentSortDir ==='asc'? '▲' : '▼'}}</span></th>
           <th @click="sortBy('room_class')">Комната <span v-if="currentSort ==='room_class'">{{currentSortDir ==='asc'? '▲' : '▼'}}</span></th>
           <th v-for="warehouse in namesWarehouses" :key="warehouse" @click="sortByWarehouses(warehouse)">
-            {{ warehouse}}
-            <span v-if="currentSort === warehouse ">
-              {{currentSortDir ==='asc'? '▲' : '▼'}}
-            </span>
+            {{ warehouse }}
+            <span v-if="currentSort === `warehouse:${warehouse}`">{{ currentSortDir === 'asc' ? '▲' : '▼' }}</span>
           </th>
+
           <template v-for="shop in filteredShops" :key="shop">
             <th v-for="field in fieldShops" :key="field" @click="sortByShopField(shop, field)">
-              {{ field + " 🔄" }}
+              {{ field }}
+              <span v-if="currentSort === `shop:${shop}:${field}`">{{ currentSortDir === 'asc' ? '▲' : '▼' }}</span>
             </th>
-          </template>
+            </template>
         </tr>
         </thead>
         <tbody>
@@ -210,23 +210,16 @@ export default {
       });
     },
   },
+
   created() {
     this.isLoading = true;
-    fetchWarehouses(
-        (warehouses) =>  {this.warehouses = warehouses; },
-        (namesWarehouses) =>  {this.namesWarehouses = namesWarehouses; })
-    fetchStores(
-        (stores) => { this.stores = stores; },
-        (storeNames) => { this.storeNames = storeNames; })// Включаем заглушку
-    Promise.all([ this.handleFetchData(this.searchTerm), fetchWarehouses(), fetchStores()])
+    Promise.all([ this.handleFetchData(this.searchTerm), this.handleFetchStores(),this.handleFetchWarehouses()])
         .finally(() => {
           console.log('Все данные загружены');  // Отладочное сообщение
           this.isLoading = false;  // Отключаем заглушку
         });
   },
-  beforeDestroy() {
-    document.removeEventListener('click', this.closeDropdown);
-  },
+
 
   methods: {
     sortByWarehouses(name) {
@@ -246,6 +239,17 @@ export default {
         this.currentSortDir = 'asc';
       }
     },
+
+    //Название магазинов
+    async handleFetchStores() {
+        try {
+          const { stores, storeNames } = await fetchStores();
+          this.stores = stores;
+          this.storeNames = storeNames;
+        } catch (error) {
+          console.error("Ошибка при загрузке магазинов:", error);
+        }
+      },
     //Товары
     async handleFetchData() {
       try {
@@ -253,6 +257,16 @@ export default {
         this.product2 = data || []; // Записываем результат в product2
       } catch (error) {
         console.error("Ошибка при загрузке данных:", error);
+      }
+    },
+    //Склады
+    async handleFetchWarehouses() {
+      try {
+        const {warehouses, namesWarehouses} = await fetchWarehouses();
+        this.warehouses = warehouses;
+        this.namesWarehouses = namesWarehouses;
+      } catch (error) {
+        console.log("Ошибка при загрузке данных:", error``)
       }
     },
     getShopField(storeData, field, product) {
