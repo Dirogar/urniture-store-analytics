@@ -1,7 +1,4 @@
-<template>
-
-</template>
-
+<template>/*Для товаров*/</template>
 <script>
 import axios from "axios";
 export function fetchData(searchTerm) {

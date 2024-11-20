@@ -136,6 +136,8 @@ import CommentButon from "@/CommentButon.vue";
 import logo from './logofull.png';
 import {ref} from "vue";
 import {fetchData} from "./FetchData.vue";
+import {fetchStores} from "./FetchStores.vue";
+import {fetchWarehouses} from "./FetchWarehouses.vue";
 
 export default {
   components: {CommentButon},
@@ -209,9 +211,14 @@ export default {
     },
   },
   created() {
-    this.handleFetchData(this.searchTerm);
-    this.isLoading = true;  // Включаем заглушку
-    Promise.all([this.fetchStores(), this.fetchWarehouses()])
+    this.isLoading = true;
+    fetchWarehouses(
+        (warehouses) =>  {this.warehouses = warehouses; },
+        (namesWarehouses) =>  {this.namesWarehouses = namesWarehouses; })
+    fetchStores(
+        (stores) => { this.stores = stores; },
+        (storeNames) => { this.storeNames = storeNames; })// Включаем заглушку
+    Promise.all([ this.handleFetchData(this.searchTerm), fetchWarehouses(), fetchStores()])
         .finally(() => {
           console.log('Все данные загружены');  // Отладочное сообщение
           this.isLoading = false;  // Отключаем заглушку
@@ -247,24 +254,6 @@ export default {
       } catch (error) {
         console.error("Ошибка при загрузке данных:", error);
       }
-    },
-    fetchStores() {
-      return axios.get('http://localhost:8000/api/v1/stores/')
-          .then(res => {
-            this.stores = res.data.results;
-            this.storeNames = this.stores.map(item => item.name);
-            this.storeNames = this.storeNames.sort()
-          })
-          .catch(err => console.error("Stores fetch error:", err));
-    },
-    fetchWarehouses() {
-      return axios.get("http://localhost:8000/api/v1/warehouses/")
-          .then(res => {
-            this.warehouses = res.data.results;
-            this.namesWarehouses = this.warehouses.map(item => item.name);
-            console.log("склады", this.warehouses);
-          })
-          .catch(err => console.error("Warehouses fetch error:", err));
     },
     getShopField(storeData, field, product) {
       if (!storeData) return '-';
