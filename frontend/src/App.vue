@@ -131,13 +131,15 @@
 </template>
 
 <script>
-import axios from 'axios';
 import CommentButon from "@/CommentButon.vue";
 import logo from './logofull.png';
 import {ref} from "vue";
 import {fetchData} from "./FetchData.vue";
 import {fetchStores} from "./FetchStores.vue";
 import {fetchWarehouses} from "./FetchWarehouses.vue";
+import { sortData} from './SortScript.js';
+import {getShopField} from "./SortScript.js";
+import {loadData} from "@/InfinityScroll.js";
 
 export default {
   components: {CommentButon},
@@ -171,43 +173,8 @@ export default {
       return this.selectShop.length === 0 ? this.storeNames : this.selectShop;
     },
     sortedData() {
-      if (!this.currentSort) return this.product2;
-      return [...this.product2].sort((a, b) => {
-        const modifier = this.currentSortDir === 'asc' ? 1 : -1;
-        if (this.currentSort === 'category') {
-          const valA = parseInt(a.category?.replace(/\D/g, '') || '-', 10);
-          const valB = parseInt(b.category?.replace(/\D/g, '') || '-', 10);
-          return (valA - valB) * modifier;
-        }
-        // Сортировка для столбцов магазинов
-        if (this.currentSort.startsWith('shop:')) {
-          const [, shop, field] = this.currentSort.split(':'); // "shop:shopName:field"
-          const valA = this.getShopField(a.stores?.[shop], field, a) || '-';
-          const valB = this.getShopField(b.stores?.[shop], field, b) || '-';
-          // Если значения числа, сортируем численно
-          if (!isNaN(parseFloat(valA)) && !isNaN(parseFloat(valB))) {
-            return (parseFloat(valA) - parseFloat(valB)) * modifier;
-          }
-          // Сортировка строк
-          return String(valA).localeCompare(String(valB)) * modifier;
-        }
-        // Сортировка для складов
-        if (this.currentSort.startsWith('warehouse:')) {
-          const warehouseName = this.currentSort.split(':')[1]; // "warehouse:warehouseName"
-          const valA = parseFloat(a.warehouses?.[warehouseName]?.stock || 0);
-          const valB = parseFloat(b.warehouses?.[warehouseName]?.stock || 0);
-          return (valA - valB) * modifier;
-        }
-        // Общая логика для остальных полей
-        const valA = a[this.currentSort] || '';
-        const valB = b[this.currentSort] || '';
-        // Если значения числа, сортируем численно
-        if (!isNaN(parseFloat(valA)) && !isNaN(parseFloat(valB))) {
-          return (parseFloat(valA) - parseFloat(valB)) * modifier;
-        }
-        // Иначе строковая сортировка
-        return String(valA).localeCompare(String(valB)) * modifier;
-      });
+      // Используем функцию sortData
+      return sortData(this.product2, this.currentSort, this.currentSortDir);
     },
   },
 
@@ -222,6 +189,7 @@ export default {
 
 
   methods: {
+    getShopField,
     sortByWarehouses(name) {
       this.sortBy(`warehouse:${name}`);
     },
@@ -264,26 +232,38 @@ export default {
       try {
         const {warehouses, namesWarehouses} = await fetchWarehouses();
         this.warehouses = warehouses;
+        console.log("crkfls",this.warehouses);
         this.namesWarehouses = namesWarehouses;
       } catch (error) {
         console.log("Ошибка при загрузке данных:", error``)
       }
     },
-    getShopField(storeData, field, product) {
-      if (!storeData) return '-';
-      switch (field) {
-        case "План":
-          return storeData.plan_exibition || '-';
-        case "Факт":
-          return storeData.fact_exhibition || '-';
-        case "Комментарии":
-          return storeData.comments_count || '-';
-        case "Площадь":
-          return product.square ? (product.square * 2) : '-';
-        default:
-          return '-';
+
+    async handleLoadData() {
+      if (this.isLoading || !this.hasMoreData) {
+        // Предотвращаем повторный вызов, если загрузка уже идёт
+        return;
       }
-    },
+
+      this.isLoading = true;
+      try{
+        const { products, hasMoreData, currentPage } = await loadData(
+            this.currentPageNew);
+        console.log("handleLoadData",products)
+        this.product2=[...this.product2, ...products];
+        this.hasMoreData = hasMoreData;
+        this.currentPageNew = currentPage;
+
+      }catch (error) {
+        console.error("Ошибка при загрузке данных:", error);
+      }
+        finally {
+        console.log('Все данные загружены');  // Отладочное сообщение
+        this.isLoading = false;}  // Отключаем заглушку};
+      },
+
+
+    //Выподающий список для выбора магазина
     toggleDropdown() {
       this.isOpen = !this.isOpen;
       if (this.isOpen) {
@@ -302,6 +282,9 @@ export default {
       const store = this.stores.find(s => s.name === shop);
       return store ? store.info : '-';
     },
+
+    // Изменение занчения для поля "План"
+    //TODO: Изменить,для отправки запроса
     enableEdit(index, shop, currentValue) {
       this.editIndex = index;
       this.editShop = shop;
@@ -324,35 +307,15 @@ export default {
       this.editedValue = '';
     },
 
-    loadData() {
-      console.log("загрузка товаров")
-
-      axios.get(`http://localhost:8000/api/v1/products/?page=${this.currentPageNew}`)
-          .then(res => {
-            const newProducts = res.data.results;
-            console.log('new_prod',newProducts);
-
-            if (newProducts.length === 0) {
-              this.hasMoreData = false; // Если больше данных нет, отключаем дальнейшую загрузку
-            } else {
-              this.product2 = [...new Set(this.product2), ...newProducts];
-              console.log("новые данные добавленны")
-              this.currentPageNew +=1 ;
-              console.log(this.currentPageNew);
-            }
-          })
-          .catch(err => console.error("Ошибка загрузки данных:", err))
-          .finally(() => {
-          });
-    },
        handleScroll() {
         const scrollContainer = this.$refs.scrollContainer;
         const scrollBottom = scrollContainer.scrollHeight - scrollContainer.scrollTop - scrollContainer.clientHeight;
 
         if (this.product2.length === 1) {
           // Ничего не делаем
-        } else if (scrollBottom === 1) {// Если до конца контейнера менее 100px
-          this.loadData();
+        } else if (scrollBottom < 100) {
+          this.handleLoadData()
+          this.isLoading = true
         }
 
       }

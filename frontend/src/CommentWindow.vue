@@ -74,6 +74,7 @@ export default {
   width: 100%;
   max-width: 80%; /* Ограничение ширины для адаптации */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Легкая тень для выделения окна */
+  transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s linear 0.5s;
 }
 
 .modal-header {
@@ -82,6 +83,7 @@ export default {
   justify-content: space-between;
   width: 100%;
   margin-bottom: 15px; /* Отступ снизу для разделения от основного содержимого */
+  transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s linear 0.5s;
 }
 
 .close-button {
@@ -89,6 +91,7 @@ export default {
   border: none;
   font-size: 24px;
   cursor: pointer;
+  transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s linear 0.5s;
 }
 
 h3 {
@@ -97,12 +100,14 @@ h3 {
   font-family: Arial, sans-serif;
   font-weight: 400;
   text-align: center;
+  transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s linear 0.5s;
 }
 
 .form-label {
   font-size: 18px;
   margin-bottom: 5px;
   margin-left: 68%;
+  transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s linear 0.5s;
 }
 
 .form-control {
@@ -113,6 +118,7 @@ h3 {
   border: 1px solid #ccc;
   border-radius: 5px;
   resize: vertical;
+  transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s linear 0.5s;
 }
 
 .textarea_input {
@@ -121,6 +127,7 @@ h3 {
   align-items: flex-start; /* Выравнивание по левому краю */
   width: 100%; /* Занимает всю ширину контейнера */
   margin-bottom: 15px; /* Отступ снизу для разделения с другими элементами */
+  transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s linear 0.5s;
 }
 
 .date-input {
@@ -128,12 +135,14 @@ h3 {
   flex-direction: column; /* Размещаем метку и поле ввода вертикально */
   gap: 5px; /* Добавляем небольшой отступ между меткой и полем */
   margin-bottom: 15px; /* Добавляем отступ снизу */
+  transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s linear 0.5s;
 }
 
 .date-complete {
   font-size: 16px;
   font-weight: bold;
   margin-left: 53%;
+  transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s linear 0.5s;
 }
 
 .data-calendar {

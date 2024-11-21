@@ -46,6 +46,7 @@ export default {
   border-radius: 5px;
   cursor: pointer;
   text-align: center;
+  transition: opacity 0.5s ease, transform 0.5s ease, visibility 10s linear 0.5s;
 }
 
 .my-button:hover {
