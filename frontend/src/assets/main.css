@@ -1,362 +1,359 @@
- /* Сброс стилей для всех элементов */
+/* Сброс стилей для всех элементов */
 body {
-  margin: 0; /* Убираем внешние отступы у body */
-  padding: 0; /* Убираем внутренние отступы у body */
-  background: #f5f5f5;
-  position: fixed;
-
+    background: #f5f5f5;
+    position: relative;
+    overflow-x: hidden;
+    margin-bottom: 50px;
 }
 
 /* Стили для контейнера в самом верху{*/
 .container_up {
-  height: 70px; /*Толщина*/
-  width: 100%; /* Устанавливаем ширину на 100% */
-  background: rgba(220, 242, 255, 0.69); /* Цвет фона для визуализации */
-  box-shadow: 0 0 15px rgb(178, 184, 255); /* Тень */
-  position: fixed;
+    height: auto; /*Толщина*/
+    width: 100%; /* Устанавливаем ширину на 100% */
+    background: rgba(220, 242, 255, 0.69); /* Цвет фона для визуализации */
+    box-shadow: 0 0 15px rgb(178, 184, 255); /* Тень */
+    padding: 0;
+    border-radius: 20px;
 }
 
 /* Стили для логотипа и названия */
 .logo-container {
-  display: block; /* Используем Flexbox для расположения в строку */
-  align-items: center; /* Центрируем по вертикали */
+    display: block; /* Используем Flexbox для расположения в строку */
+    align-items: center; /* Центрируем по вертикали */
 }
 
 .logo {
-  margin: 20px;
-  max-height: 50px; /* Ограничиваем высоту логотипа */
-  height: 27px/* Отступ между логотипом и названием */
+    margin: 20px;
+    max-height: 50px; /* Ограничиваем высоту логотипа */
+    height: 27px/* Отступ между логотипом и названием */
 }
 
 .name-container {
-  position: fixed;
-  font-size: 35px;
-  font-weight: bold;
-  font-family:"Varela Round","Comfortaa Light" , Verdana, Geneva, Tahoma, sans-serif;
-  left:205px;
-  top: 15px;
+    position: absolute;
+    font-size: 35px;
+    font-weight: bold;
+    font-family:"Varela Round","Comfortaa Light" , Verdana, Geneva, Tahoma, sans-serif;
+    top:15px;
 }
-/*}*/
-/* отвечает за  надпись Кол-во в таблице */
+
 .comment-lable{
-  font-size: 16px;
-  color: rgba(64, 63, 63, 0.97);
-  display: block;
+    font-size: 16px;
+    color: rgba(64, 63, 63, 0.97);
+    display: block;
 }
 
 /*Данные которые находятся в заголовке вместе с магазинами*/
 .small-data{
-  font-size: 20px;
-  color: rgba(94, 92, 92, 0.72);
-  display: block;
-  word-break: normal;
-  white-space:pre-line;
+    font-size: 20px;
+    color: rgba(94, 92, 92, 0.72);
+    display: block;
+    word-break: normal;
+    white-space:pre-line;
 }
 
 /* Стили для главного окна с таблицей */
 .main-window {
-  background-color: #fff;
-  box-shadow: 0 0 15px rgb(178, 184, 255);
-  border-radius: 20px;
-  margin: 50px 30px 30px;
-  overflow-y: auto;
-  overflow-x: auto;/* Прокрутка только при необходимости */
-  width: 98%;
-  height: auto; /* Фиксированная высота для прокрутки */
-  position: relative; /* Для корректной работы position: sticky у дочерних элементов */
-  z-index: 1;
-  max-height: 820px;
+    background-color: #fff;
+    box-shadow: 0 0 15px rgb(178, 184, 255);
+    border-radius: 20px;
+    margin: 50px 30px 30px;
+    overflow-y: auto;
+    overflow-x: auto;/* Прокрутка только при необходимости */
+    width: 98%;
+    height: auto; /* Фиксированная высота для прокрутки */
+    position: relative; /* Для корректной работы position: sticky у дочерних элементов */
+    z-index: 1;
+    max-height: 820px;
 }
 /* Сам контейнер который находится в самом главном контейнере*/
 .button-container-up {
-  top: 22px;
-  position: absolute;
-  left: 40%;
-  width: 100%;
+    top: 22px;
+    position: absolute;
+    left: 40%;
 }
 
 /* расположение кнопок в верхнем контейнере*/
 .button-container-up button {
-  margin-right: 20px; /* Отступ между кнопками */
-  padding: 5px 10px; /* Внутренние отступы для создания "воздушности" */
-  /* Минимальная ширина кнопки (можно изменить по необходимости) */
-  white-space: nowrap; /* Не переносить текст на новую строку */
-  text-align: center; /* Выравнивание текста по центру */
+    margin-right: 10px; /* Отступ между кнопками */
+    padding: 5px 10px; /* Внутренние отступы для создания "воздушности" */
+    /* Минимальная ширина кнопки (можно изменить по необходимости) */
+    white-space: nowrap; /* Не переносить текст на новую строку */
+    text-align: center; /* Выравнивание текста по центру */
 }
 
 .my-button {
-  width: auto; /* Установка ширины кнопки */
-  height: 30px; /* Установка высоты кнопки */
-  font-size: 18px; /* Увеличение размера шрифта */
-  background-color: rgba(0, 123, 255, 0); /* Цвет фона */
-  color: #221919; /* Цвет текста */
-  border-radius: 5px; /* Скругление углов */
-  cursor: pointer; /* Указатель при наведении */
-  font-family:"Varela Round","Comfortaa Light" , Verdana, Geneva, Tahoma, sans-serif;
-  border: #9c9999 1px solid;
+    width: auto; /* Установка ширины кнопки */
+    height: 30px; /* Установка высоты кнопки */
+    font-size: 18px; /* Увеличение размера шрифта */
+    background-color: rgba(0, 123, 255, 0); /* Цвет фона */
+    color: #221919; /* Цвет текста */
+    border-radius: 5px; /* Скругление углов */
+    cursor: pointer; /* Указатель при наведении */
+    font-family:"Varela Round","Comfortaa Light" , Verdana, Geneva, Tahoma, sans-serif;
+    border: #9c9999 1px solid;
 }
 
 .my-button:hover {
-  border-color: #131313;
-  background: #abd7ff;
-  /* Цвет кнопки при наведении */
+    border-color: #131313;
+    background: #abd7ff;
+    /* Цвет кнопки при наведении */
 }
 
 .my-button-dropdown{
-  width: 300px; /* Установка ширины кнопки */
-  height: 30px; /* Установка высоты кнопки */
-  font-size: 18px; /* Увеличение размера шрифта */
-  padding: 2px 10px; /* Установка внутренних отступов */
-  background-color: rgba(0, 123, 255, 0); /* Цвет фона */
-  color: #221919; /* Цвет текста */
-  border-radius: 5px; /* Скругление углов */
-  cursor: pointer; /* Указатель при наведении */
-  border: #9c9999 1px solid;
-  font-family:"Varela Round","Comfortaa Light" , Verdana, Geneva, Tahoma, sans-serif;
+    width: 300px; /* Установка ширины кнопки */
+    height: 30px; /* Установка высоты кнопки */
+    font-size: 18px; /* Увеличение размера шрифта */
+    padding: 2px 10px; /* Установка внутренних отступов */
+    background-color: rgba(0, 123, 255, 0); /* Цвет фона */
+    color: #221919; /* Цвет текста */
+    border-radius: 5px; /* Скругление углов */
+    cursor: pointer; /* Указатель при наведении */
+    border: #9c9999 1px solid;
+    font-family:"Varela Round","Comfortaa Light" , Verdana, Geneva, Tahoma, sans-serif;
 }
 
 .my-button-dropdown:hover{
-  background-color: #9c9999;
-  color: white;
+    background-color: #9c9999;
+    color: white;
 }
 .search {
-  width: 100%;
-  position: relative;
-  display: flex;
+    width: 100%;
+    position: relative;
+    display: flex;
 }
 .searchTerm {
-  width: 100%;
-  border: 1px solid #5872e8;
-  border-right: none;
-  padding: 5px;
-  height: 20px;
-  border-radius: 5px 0 0 5px;
-  outline: none;
-  font-family:"Varela Round","Comfortaa Light" , Verdana, Geneva, Tahoma, sans-serif;
-  font-weight: bold;
-  font-size: 18px;
+    width: 100%;
+    border: 1px solid #5872e8;
+    border-right: none;
+    padding: 5px;
+    height: 20px;
+    border-radius: 5px 0 0 5px;
+    outline: none;
+    font-family:"Varela Round","Comfortaa Light" , Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: bold;
+    font-size: 18px;
 
 }
 .searchTerm:focus{
-  color: #221919;
+    color: #221919;
 }
 .searchButton {
-  width: 15%;
-  height: 32px;
-  border: 1px solid #5872e8;
-  background: #5872e8;
-  text-align: center;
-  color: #ffffff;
-  border-radius: 0 5px 5px 0;
-  cursor: pointer;
-  font-size: 20px;
+    width: 15%;
+    height: 32px;
+    border: 1px solid #5872e8;
+    background: #5872e8;
+    text-align: center;
+    color: #ffffff;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    font-size: 20px;
 }
 .wrap{
-  position: absolute;
-  width: 15%;
-  height: 30px;
-  top: 33px;
-  left: 30%;
-  transform: translate(-50%, -50%);
+    position: absolute;
+    width: 15%;
+    height: 30px;
+    top: 33px;
+    left: 30%;
+    transform: translate(-50%, -50%);
 }
 
 
 .table {
-  width: 98%;
-  text-align: center;
-  border-collapse: collapse;
-  border-radius: 50px;
-  height: 98% !important;
+    width: 98%;
+    text-align: center;
+    border-collapse: collapse;
+    border-radius: 50px;
+    height: 98% !important;
 }
 
 .table th, .table td {
-  padding: 15px;
+    padding: 15px;
 }
 
 table tr:hover{
-  background: rgba(124, 123, 123, 0.27);
+    background: rgba(124, 123, 123, 0.27);
 }
 
 tbody td {
-  font-family:"Varela Round","Comfortaa Light" , Verdana, Geneva, Tahoma, sans-serif;
-  text-align: center;
-  padding: 15px 15px 15px 15px;
-  outline: 1px solid rgb(209, 209, 209);
-  line-height: 20px;
+    font-family:"Varela Round","Comfortaa Light" , Verdana, Geneva, Tahoma, sans-serif;
+    text-align: center;
+    padding: 15px 15px 15px 15px;
+    outline: 1px solid rgb(209, 209, 209);
+    line-height: 20px;
 
 }
 
 tr:nth-child(odd) {
-  background-color: rgb(241, 239, 239); /* Цвет фона для четных строк */
+    background-color: rgb(241, 239, 239); /* Цвет фона для четных строк */
 }
 
 
 thead tr:first-child th {
-  position: sticky;
-  top: 0;
-  padding: 20px;
-  background-color: rgb(241, 239, 239);
-  font-family:"Varela Round","Comfortaa Light" , Verdana, Geneva, Tahoma, sans-serif;
-  font-size:150%;
+    position: sticky;
+    top: 0;
+    padding: 20px;
+    background-color: rgb(241, 239, 239);
+    font-family:"Varela Round","Comfortaa Light" , Verdana, Geneva, Tahoma, sans-serif;
+    font-size:150%;
 
 }
 
 thead tr:nth-child(2) th {
-  position: sticky;
-  padding: 15px 15px 15px 15px;
-  top: 160px; /* Отступ совпадает с высотой первой строки */
-  background-color: #ffffff;
-  font-family:"Varela Round","Comfortaa Light" , Verdana, Geneva, Tahoma, sans-serif;
-  font-size: larger;
-  white-space: nowrap;
-  outline: 1px solid rgba(209, 209, 209, 0.67);;
+    position: sticky;
+    padding: 15px 15px 15px 15px;
+    top: 160px; /* Отступ совпадает с высотой первой строки */
+    background-color: #ffffff;
+    font-family:"Varela Round","Comfortaa Light" , Verdana, Geneva, Tahoma, sans-serif;
+    font-size: larger;
+    white-space: nowrap;
+    outline: 1px solid rgba(209, 209, 209, 0.67);;
 }
 
 /* Фиксация первого столбца (по горизонтали и вертикали) */
 table th:first-child,
 table td:first-child {
-  position: sticky;
-  left: 0;
-  padding: 15px 15px 15px 15px;
-  top: 0; /* Фиксируем заголовок первого столбца сверху при вертикальной прокрутке */
-  z-index: 7; /* Увеличиваем z-index для перекрытия других элементов */
-  outline: 1px solid rgba(237, 237, 237, 0.35);
+    position: sticky;
+    left: 0;
+    padding: 15px 15px 15px 15px;
+    top: 0; /* Фиксируем заголовок первого столбца сверху при вертикальной прокрутке */
+    z-index: 7; /* Увеличиваем z-index для перекрытия других элементов */
+    outline: 1px solid rgba(237, 237, 237, 0.35);
 
 }
 
 /* Фиксация второго столбца (по горизонтали и вертикали) */
 table th:nth-child(2),
 table td:nth-child(2) {
-  position: sticky;
-  padding: 15px 15px 15px 15px;
-  left: 107px; /* Задаем смещение для второго столбца */
-  top: 0; /* Фиксируем заголовок второго столбца сверху при вертикальной прокрутке */
-  background-color: #f4f4f4; /* Цвет фона второго столбца */
-  z-index: 6; /* Немного ниже, чем первый столбец */
-  outline: 1px solid rgba(237, 237, 237, 0.35);
+    position: sticky;
+    padding: 15px 15px 15px 15px;
+    left: 107px; /* Задаем смещение для второго столбца */
+    top: 0; /* Фиксируем заголовок второго столбца сверху при вертикальной прокрутке */
+    background-color: #f4f4f4; /* Цвет фона второго столбца */
+    z-index: 6; /* Немного ниже, чем первый столбец */
+    outline: 1px solid rgba(237, 237, 237, 0.35);
 
 }
 tbody tr:nth-child(odd) td:first-child,
 tbody tr:nth-child(odd) th:first-child {
-  background-color: rgb(227, 226, 226); /* Синхронизация цвета с нечетными строками */
+    background-color: rgb(227, 226, 226); /* Синхронизация цвета с нечетными строками */
 }
 
 /* Фон для второго фиксированного столбца в нечетных строках */
 tbody tr:nth-child(odd) td:nth-child(2),
 tbody tr:nth-child(odd) th:nth-child(2) {
-  background-color: rgb(227, 226, 226);/* Синхронизация цвета для второго столбца */
+    background-color: rgb(227, 226, 226);/* Синхронизация цвета для второго столбца */
 }
 tbody tr:nth-child(even) td:first-child,
 tbody tr:nth-child(even) th:first-child {
-  background-color: rgb(239, 239, 239); /* Синхронизация цвета с нечетными строками */
+    background-color: rgb(239, 239, 239); /* Синхронизация цвета с нечетными строками */
 }
 
 /* Фон для второго фиксированного столбца в нечетных строках */
 tbody tr:nth-child(even) td:nth-child(2),
 tbody tr:nth-child(even) th:nth-child(2) {
-  background-color: rgb(239, 239, 239); /* Синхронизация цвета для второго столбца */
+    background-color: rgb(239, 239, 239); /* Синхронизация цвета для второго столбца */
 }
 
 /* Фиксация всех заголовков */
 thead th {
-  position: sticky;
-  top: 0; /* Фиксируем заголовок сверху */
-  background-color: rgb(240, 240, 240); /* Цвет фона заголовка */
-  z-index: 5; /* Делаем выше обычных ячеек, но ниже фиксированных столбцов */
-  outline: 1px solid rgb(23, 124, 207);
+    position: sticky;
+    top: 0; /* Фиксируем заголовок сверху */
+    background-color: rgb(240, 240, 240); /* Цвет фона заголовка */
+    z-index: 5; /* Делаем выше обычных ячеек, но ниже фиксированных столбцов */
+    outline: 1px solid rgb(23, 124, 207);
 }
 
 /* Дополнительный стиль для заголовков фиксированных столбцов */
 thead th:first-child {
-  z-index: 8;
-  /* Увеличиваем индекс для заголовка первого фиксированного столбца */
+    z-index: 8;
+    /* Увеличиваем индекс для заголовка первого фиксированного столбца */
 }
 
 thead th:nth-child(2) {
-  z-index: 7; /* Увеличиваем индекс для заголовка второго фиксированного столбца */
+    z-index: 7; /* Увеличиваем индекс для заголовка второго фиксированного столбца */
 }
 
 .dropdown {
-  position: relative;
-  display: inline-block;
-  z-index: 2;
+    position: relative;
+    display: inline-block;
+    z-index: 2;
 }
 
 .dropdown-menu {
-  background-color: #f8f3f3;
-  border: 1px solid #ddd;
-  position: absolute;
-  width: 100%;
-  border-radius: 5px;
-  max-height: 500px;
-  box-shadow: 0 0 15px rgb(178, 184, 255);
-  overflow-y: auto
+    background-color: #f8f3f3;
+    border: 1px solid #ddd;
+    position: absolute;
+    width: 100%;
+    border-radius: 5px;
+    max-height: 500px;
+    box-shadow: 0 0 15px rgb(178, 184, 255);
+    overflow-y: auto
 
 }
 
 .dropdown-item {
-  padding: 8px 16px;
-  text-decoration: none;
-  color: #131313;
-  display: block;
-  font-family:"Varela Round","Comfortaa Light" , Verdana, Geneva, Tahoma, sans-serif;
-  font-size:20px;
-  white-space: nowrap;
-  font-weight:bold;
+    padding: 8px 16px;
+    text-decoration: none;
+    color: #131313;
+    display: block;
+    font-family:"Varela Round","Comfortaa Light" , Verdana, Geneva, Tahoma, sans-serif;
+    font-size:20px;
+    white-space: nowrap;
+    font-weight:bold;
 
 
 }
 
 .dropdown-item:hover {
-  background-color: #b8b8b8;
+    background-color: #b8b8b8;
 }
 
 .loading-overlay {
- position: fixed;
- top: 0;
- left: 0;
- width: 100%;
- height: 100%;
- background-color: rgba(172, 171, 171, 0.63); /* полупрозрачный серый фон */
- display: flex;
- justify-content: center;
- align-items: center;
- z-index: 10;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(172, 171, 171, 0.63); /* полупрозрачный серый фон */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
 }
 
- .loader {
-   border:  8px solid #ff0000;
-   border-top: 8px solid #134aff;
-   border-radius: 50%;
-   width: 60px;
-   height: 60px;
-   animation: spin 1s linear infinite;
-   z-index: 10;
- }
+.loader {
+    border:  8px solid #ff0000;
+    border-top: 8px solid #134aff;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+    z-index: 10;
+}
 
- @keyframes spin {
-   0% { transform: rotate(0deg); }
-   100% { transform: rotate(360deg); }
- }
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
 
 .button-filter {
-  width: 300px; /* Установка ширины кнопки */
-  height: 30px; /* Установка высоты кнопки */
-  font-size: 18px; /* Увеличение размера шрифта */
-  padding: 2px 10px; /* Установка внутренних отступов */
-  background-color: rgba(0, 123, 255, 0); /* Цвет фона */
-  color: #221919; /* Цвет текста */
-  border-radius: 5px; /* Скругление углов */
-  cursor: pointer; /* Указатель при наведении */
-  border: #9c9999 1px solid;
-  font-family:"Varela Round","Comfortaa Light" , Verdana, Geneva, Tahoma, sans-serif;
-  right: 100px;
+    width: 300px; /* Установка ширины кнопки */
+    height: 30px; /* Установка высоты кнопки */
+    font-size: 18px; /* Увеличение размера шрифта */
+    padding: 2px 10px; /* Установка внутренних отступов */
+    background-color: rgba(0, 123, 255, 0); /* Цвет фона */
+    color: #221919; /* Цвет текста */
+    border-radius: 5px; /* Скругление углов */
+    cursor: pointer; /* Указатель при наведении */
+    border: #9c9999 1px solid;
+    font-family:"Varela Round","Comfortaa Light" , Verdana, Geneva, Tahoma, sans-serif;
+    right: 100px;
 }
 .filter-dropdown{
-  position: relative;
-  display: inline-block;
-  z-index: 2;
+    position: relative;
+    display: inline-block;
+    z-index: 2;
 }
 .button-filter:hover{
-  background-color: red;
+    background-color: red;
 }
