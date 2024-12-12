@@ -42,6 +42,36 @@
           </div>
         </div>
       </div>
+      <div class="pagination">
+        <!-- Кнопка "Назад" -->
+        <button
+            @click="handleFetchData(currentPage - 1)"
+            :disabled="!prevURL || currentPage === 1"
+        >
+          Назад
+        </button>
+
+        <!-- Кнопки страниц -->
+        <button
+            v-for="pageNumber in page"
+            :key="pageNumber"
+            :class="{ active: pageNumber === currentPage }"
+            @click="handleFetchData(pageNumber)"
+        >
+          {{ pageNumber }}
+        </button>
+
+        <!-- Кнопка "Вперед" -->
+        <button
+            @click="handleFetchData(currentPage + 1)"
+            :disabled="!nextURL || currentPage === page"
+        >
+          Вперед
+        </button>
+      </div>
+
+
+
   <!-- Table -->
       <div class="main-window" ref="scrollContainer" @scroll="handleScroll">
         <table class="table" id="Table">
@@ -63,10 +93,10 @@
               <th @click="sortBy('matrix')">Матрица <span class="sort-direction" v-if="currentSort ==='matrix'">{{currentSortDir ==='asc'? '▲' : '▼'}}</span><span class="point_navigation" v-else> ●</span></th>
               <th @click="sortBy('category')">Категория <span class="sort-direction" v-if="currentSort ==='category'">{{currentSortDir ==='asc'? '▲' : '▼'}}</span><span class="point_navigation" v-else> ●</span></th>
               <th @click="sortBy('room_class')">Комната <span class="sort-direction" v-if="currentSort ==='room_class'">{{currentSortDir ==='asc'? '▲' : '▼'}}</span><span class="point_navigation" v-else> ●</span></th>
-              <th v-for="warehouse in namesWarehouses" :key="warehouse" @click="sortByWarehouses(warehouse)">{{ warehouse }}<span class="sort-direction" v-if="currentSort === `warehouse:${warehouse}`">{{ currentSortDir === 'asc' ? '▲' : '▼' }}</span><span class="point_navigation" v-else>●</span></th>
+              <th v-for="warehouse in namesWarehouses" :key="warehouse" @click="sortByWarehouses(warehouse)">{{ warehouse }}<span class="sort-direction" v-if="currentSort === `warehouse:${warehouse}`">{{ currentSortDir === 'asc' ? '▲' : '▼' }}</span><span class="point_navigation" v-else> ●</span></th>
 
               <template v-for="shop in filteredShops" :key="shop">
-                <th v-for="field in fieldShops" :key="field" @click="sortByShopField(shop, field)">{{ field }}<span class="sort-direction" v-if="currentSort === `shop:${shop}:${field}`">{{ currentSortDir === 'asc' ? '▲' : '▼' }}</span><span class="point_navigation" v-else>●</span></th>
+                <th v-for="field in fieldShops" :key="field" @click="sortByShopField(shop, field)">{{ field }}<span class="sort-direction" v-if="currentSort === `shop:${shop}:${field}`">{{ currentSortDir === 'asc' ? '▲' : '▼' }}</span><span class="point_navigation" v-else> ●</span></th>
               </template>
             </tr>
           </thead>
@@ -139,11 +169,14 @@ export default {
       editIndex: null,
       editShop: null,
       editedValue: '',
-      currentPageNew: 2, // Текущая страница данных
       isLoadingData: false, // Индикатор загрузки
       hasMoreData: true,
       currentSort: ' ',
-      currentSortDir: ref('asc')
+      currentSortDir: ref('asc'),
+      currentPage: 1, // Текущая страница
+      totalItems: 0, // Общее количество товаров
+      nextPageUrl: null, // URL для следующей страницы
+      previousPageUrl: null, // URL для предыдущей страницы
 
     };
   },
@@ -198,10 +231,18 @@ export default {
         }
       },
     //Товары
-    async handleFetchData() {
+    async handleFetchData(page = 1) {
       try {
-        const data = await fetchData(this.searchTerm); // Ожидаем завершения fetchData
-        this.product2 = data || []; // Записываем результат в product2
+        this.isLoading = true;
+        this.currentPage = page;
+        const data = await fetchData(this.searchTerm, this.currentPage);
+        console.log(data)
+        this.product2 = data.products;
+        this.totalItems = data.totalItems;
+        this.nextURL = data.nextURL;
+        this.prevURL = data.prevURL;
+        this.page = Math.ceil(this.totalItems / 100);
+        this.isLoading= false;
       } catch (error) {
         console.error("Ошибка при загрузке данных:", error);
       }
@@ -262,18 +303,6 @@ export default {
       this.editedValue = '';
     },
 
-       handleScroll() {
-        const scrollContainer = this.$refs.scrollContainer;
-        const scrollBottom = scrollContainer.scrollHeight - scrollContainer.scrollTop - scrollContainer.clientHeight;
-
-        if (this.product2.length === 1) {
-          // Ничего не делаем
-        } else if (scrollBottom < 100) {
-          this.handleLoadData()
-          this.isLoading = true
-        }
-
-      }
   }
 };
 </script>
