@@ -8,14 +8,17 @@
 
         <div class="button-container-up">
           <div class="filter-dropdown">
-            <button type="button" class="button-filter">Фильтрация</button>
+            <button type="button" class="button-filter">
+              <i class="pi pi-filter" style="margin-right: 5px;"></i>
+            </button>
               <div v-if="isOpenFilter" class="dropdown-menu-filter">
                 <div class="dropdown-item-filter"></div>
               </div>
           </div>
+
       <!-- Dropdown -->
         <div class="dropdown">
-          <button class="my-button-dropdown" @click="toggleDropdown">Выберите магазин</button>
+          <button class="my-button-dropdown" @click="toggleDropdown">Салон</button>
             <div v-if="isOpen" class="dropdown-menu">
               <div class="dropdown-item" v-for="(name, id) in storeNames" :key="id">
                 <input type="checkbox"
@@ -36,8 +39,8 @@
               class="searchTerm"
               v-model="searchTerm"
               placeholder="Поиск по артикулу" />
-          <button type="submit" class="searchButton" @click="handleFetchData">
-            <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
+          <button type="submit" class="searchButton" @click="handleFetchData(1)">
+            <i class="pi pi-search" style="color:white;"></i>
           </button>
           </div>
         </div>
@@ -73,7 +76,7 @@
 
 
   <!-- Table -->
-      <div class="main-window" ref="scrollContainer" @scroll="handleScroll">
+      <div class="main-window">
         <table class="table" id="Table">
           <thead>
             <tr>
@@ -141,8 +144,9 @@
 
 
 <script>
+import "primeicons/primeicons.css";
 import CommentButon from "@/CommentButon.vue";
-import logo from './logofull.png';
+import logo from './logo.png';
 import {ref} from "vue";
 import {fetchData} from "./FetchData.vue";
 import {fetchStores} from "./FetchStores.vue";
@@ -192,7 +196,7 @@ export default {
 
   created() {
     this.isLoading = true;
-    Promise.all([ this.handleFetchData(this.searchTerm), this.handleFetchStores(),this.handleFetchWarehouses()])
+    Promise.all([ this.handleFetchData(1), this.handleFetchStores(),this.handleFetchWarehouses()])
         .finally(() => {
           console.log('Все данные загружены');  // Отладочное сообщение
           this.isLoading = false;  // Отключаем заглушку
@@ -236,7 +240,6 @@ export default {
         this.isLoading = true;
         this.currentPage = page;
         const data = await fetchData(this.searchTerm, this.currentPage);
-        console.log(data)
         this.product2 = data.products;
         this.totalItems = data.totalItems;
         this.nextURL = data.nextURL;

@@ -1,0 +1,146 @@
+.point_navigation{
+    color: #1457e6;
+    font-size: 15px;
+    top:20px;
+}
+
+.comment-lable{
+    font-size: 16px;
+    color: rgba(64, 63, 63, 0.97);
+    display: block;
+}
+
+/*Данные которые находятся в заголовке вместе с магазинами*/
+.small-data{
+    padding-top: 10px;
+    font-size: 20px;
+    color: rgba(69, 69, 69, 0.72);
+    display: block;
+    word-break: normal;
+    white-space:pre-line;
+
+}
+
+/* Стили для главного окна с таблицей */
+.main-window {
+    background-color: #fff;
+    box-shadow: 0 0 15px rgb(13, 21, 80); /* Тень */
+    border-radius: 20px;
+    margin-top: 45px;
+    overflow-y: auto;
+    overflow-x: auto;/* Прокрутка только при необходимости */
+    width: 100%;
+    height: auto; /* Фиксированная высота для прокрутки */
+    position: relative; /* Для корректной работы position: sticky у дочерних элементов */
+    z-index: 1;
+    max-height: 820px;
+}
+
+
+
+.table {
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+    height: 100%;
+
+}
+
+.table th, .table td {
+    border: none!important;
+    font-family:"Varela Round","Comfortaa Light" , Verdana, Geneva, Tahoma, sans-serif;
+    text-align: center;
+    outline: 1px solid rgba(34, 25, 25, 0.24);
+}
+
+table tr:hover{
+    background: rgba(124, 123, 123, 0.27);
+}
+
+
+tr:nth-child(odd) {
+    background-color: rgb(232, 232, 232); /* Цвет фона для четных строк */
+}
+
+/* Большие заголовки таблици */
+thead tr:first-child th {
+    position: sticky;
+    top: 0;
+    padding: 5px 5px 5px 5px;
+    background-color: rgb(255, 255, 255);
+    font-family:"Varela Round","Comfortaa Light" , Verdana, Geneva, Tahoma, sans-serif;
+    font-size:150%;
+
+}
+/* Заголовки */
+thead tr:nth-child(2) th {
+    position: sticky;
+    padding: 10px 10px 10px 10px;
+    top: 19.9%; /* Отступ совпадает с высотой первой строки */
+    background-color: #ffffff;
+    font-family:"Varela Round","Comfortaa Light" , Verdana, Geneva, Tahoma, sans-serif;
+    font-size: larger;
+    white-space: nowrap;
+    border: none;
+}
+
+/* Фиксация первого столбца (по горизонтали и вертикали) */
+table th:first-child,
+table td:first-child {
+    position: sticky;
+    left: 0;
+    padding: 15px 15px 15px 15px;
+    top: 0; /* Фиксируем заголовок первого столбца сверху при вертикальной прокрутке */
+    z-index: 7; /* Увеличиваем z-index для перекрытия других элементов */
+    border: 20px solid rgb(152, 151, 151);
+
+}
+
+/* Фиксация второго столбца (по горизонтали и вертикали) */
+table th:nth-child(2),
+table td:nth-child(2) {
+    position: sticky;
+    padding: 15px 15px 15px 15px;
+    left: 107px; /* Задаем смещение для второго столбца */
+    top: 0; /* Фиксируем заголовок второго столбца сверху при вертикальной прокрутке */
+    background-color: #f4f4f4; /* Цвет фона второго столбца */
+    z-index: 6; /* Немного ниже, чем первый столбец */
+    border: 20px solid rgb(152, 151, 151);
+
+}
+tbody tr:nth-child(odd) td:first-child,
+tbody tr:nth-child(odd) th:first-child {
+    background-color: rgb(227, 226, 226); /* Синхронизация цвета с нечетными строками */
+}
+
+/* Фон для второго фиксированного столбца в нечетных строках */
+tbody tr:nth-child(odd) td:nth-child(2),
+tbody tr:nth-child(odd) th:nth-child(2) {
+    background-color: rgb(227, 226, 226);/* Синхронизация цвета для второго столбца */
+}
+tbody tr:nth-child(even) td:first-child,
+tbody tr:nth-child(even) th:first-child {
+    background-color: rgb(239, 239, 239); /* Синхронизация цвета с нечетными строками */
+}
+
+/* Фон для второго фиксированного столбца в нечетных строках */
+tbody tr:nth-child(even) td:nth-child(2),
+tbody tr:nth-child(even) th:nth-child(2) {
+    background-color: rgb(239, 239, 239); /* Синхронизация цвета для второго столбца */
+}
+
+/* Фиксация всех заголовков */
+thead th {
+    /* Делаем выше обычных ячеек, но ниже фиксированных столбцов */
+    outline: 1px solid rgb(174, 174, 174);
+}
+
+/* Дополнительный стиль для заголовков фиксированных столбцов */
+thead th:first-child {
+    z-index: 8;
+    /* Увеличиваем индекс для заголовка первого фиксированного столбца */
+}
+
+thead th:nth-child(2) {
+    z-index: 7; /* Увеличиваем индекс для заголовка второго фиксированного столбца */
+}

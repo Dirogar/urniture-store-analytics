@@ -1,6 +1,7 @@
 <template>/*Для товаров*/</template>
 <script>
 import axios from "axios";
+
 export function fetchData(searchTerm,currentPage) {
         if(!searchTerm.trim()){
           return axios.get(`http://localhost:8000/api/v1/products/?page=${currentPage}`)
@@ -18,7 +19,12 @@ export function fetchData(searchTerm,currentPage) {
         else{
           return axios.get(`http://localhost:8000/api/v1/products/${searchTerm.trim()}/`)
               .then(res => {
-                return [res.data];
+                return{
+                  products: [res.data],
+                  totalItems: null,
+                  nextURL: null,
+                  prevURL: null,
+                };
               })
               .catch(err => {
                 console.log(err);

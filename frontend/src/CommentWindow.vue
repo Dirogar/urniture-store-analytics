@@ -75,6 +75,7 @@ export default {
   max-width: 80%; /* Ограничение ширины для адаптации */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Легкая тень для выделения окна */
   transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s linear 0.5s;
+  z-index: 9999;
 }
 
 .modal-header {
@@ -142,7 +143,7 @@ h3 {
   font-size: 16px;
   font-weight: bold;
   margin-left: 53%;
-  transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s linear 0.5s;
+  transition: opacity 0.9ms ease, transform 0.9ms ease, visibility 5s linear 0.9ms;
 }
 
 .data-calendar {
