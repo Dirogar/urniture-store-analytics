@@ -5,11 +5,10 @@
 }
 
 .comment-lable{
-    font-size: 16px;
+    font-size: 20px;
     color: rgba(64, 63, 63, 0.97);
     display: block;
 }
-
 /*Данные которые находятся в заголовке вместе с магазинами*/
 .small-data{
     padding-top: 10px;
@@ -35,16 +34,7 @@
     z-index: 1;
     max-height: 820px;
 }
-
-
-
-.table {
-    width: 100%;
-    text-align: center;
-    border-collapse: collapse;
-    height: 100%;
-
-}
+.table {width: 100%;text-align: center;border-collapse: collapse;height: 100%;}
 
 .table th, .table td {
     border: none!important;

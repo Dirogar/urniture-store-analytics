@@ -39,6 +39,7 @@ export default {
 
 <style scoped>
 .my-button {
+  font-size:20px;
   padding: 0 0;
   background-color: #007efb;
   color: white;
@@ -47,6 +48,9 @@ export default {
   cursor: pointer;
   text-align: center;
   transition: opacity 0.5s ease, transform 0.5s ease, visibility 10s linear 0.5s;
+  height: 25px;
+  width: auto;
+
 }
 
 .my-button:hover {

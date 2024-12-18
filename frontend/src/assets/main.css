@@ -1,12 +1,27 @@
 /* Сброс стилей для всех элементов */
-
+.bottom-user{
+    margin-left: 96%;
+    position: absolute;
+    top: 0;
+    font-size: 25px;
+    border:none;
+    border-radius: 20px;
+    height: 40px;
+    width: 40px;
+    background-color: rgba(255, 255, 255, 0);
+    cursor: pointer;
+}
+.bottom-user:hover{
+    background-color: #939090;
+}
 
 body {
-    background: rgba(0, 0, 0, 0.63);
+    background: rgba(0, 0, 0, 0.43);
     position: relative;
     overflow-x: hidden;
     margin-bottom: 50px;
     overflow-y: hidden;
+    margin-right: 20px;
 }
 
 /*css для кнопок пагинации*/
@@ -31,6 +46,7 @@ body {
     box-shadow: 0 0 15px rgb(0, 134, 255); /* Тень */
 }
 
+
 .pagination button:disabled {
     background-color: rgb(255, 255, 255);
     cursor: not-allowed;
@@ -38,7 +54,7 @@ body {
 
 /* Стили для контейнера в самом верху{*/
 .container_up {
-    height: auto; /*Толщина*/
+    height: 40px; /*Толщина*/
     width: 100%; /* Устанавливаем ширину на 100% */
     background: rgba(255, 255, 255, 0.91); /* Цвет фона для визуализации */
     box-shadow: 0 0 15px rgb(13, 21, 80); /* Тень */

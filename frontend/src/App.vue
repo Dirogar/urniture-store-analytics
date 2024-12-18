@@ -5,20 +5,14 @@
       <div class="container_up">
         <div class="logo-container">
         <img :src="logo" alt="Логотип Matrix" class="logo"/><span class="name-container">Matrix</span>
-
-        <div class="button-container-up">
-          <div class="filter-dropdown">
-            <button type="button" class="button-filter">
-              <i class="pi pi-filter" style="margin-right: 5px;"></i>
-            </button>
-              <div v-if="isOpenFilter" class="dropdown-menu-filter">
-                <div class="dropdown-item-filter"></div>
-              </div>
-          </div>
+          <button class="bottom-user"><i class="pi pi-user" style="color: black;"></i></button>
+        </div>
 
       <!-- Dropdown -->
         <div class="dropdown">
-          <button class="my-button-dropdown" @click="toggleDropdown">Салон</button>
+          <button class="my-button-dropdown" @click="toggleDropdown">
+            <i class="pi pi-shop" style="margin-right: 5px;"></i> Магазин
+          </button>
             <div v-if="isOpen" class="dropdown-menu">
               <div class="dropdown-item" v-for="(name, id) in storeNames" :key="id">
                 <input type="checkbox"
@@ -26,13 +20,10 @@
                 :id="id"
                 v-model="selectShop"/>
                 <label>{{ name }}</label>
+                </div>
               </div>
-            </div>
-        </div>
-        <button type="button" class="my-button">Все комментарии</button>
-        <button type="button" class="my-button">ОиП</button>
-        </div>
           </div>
+        </div>
         <div class="wrap">
           <div class="search">
             <input type="text"
@@ -44,37 +35,27 @@
           </button>
           </div>
         </div>
-      </div>
       <div class="pagination">
         <!-- Кнопка "Назад" -->
         <button
             @click="handleFetchData(currentPage - 1)"
-            :disabled="!prevURL || currentPage === 1"
-        >
+            :disabled="!prevURL || currentPage === 1">
           Назад
         </button>
-
         <!-- Кнопки страниц -->
         <button
             v-for="pageNumber in page"
             :key="pageNumber"
             :class="{ active: pageNumber === currentPage }"
-            @click="handleFetchData(pageNumber)"
-        >
+            @click="handleFetchData(pageNumber)">
           {{ pageNumber }}
         </button>
-
         <!-- Кнопка "Вперед" -->
         <button
             @click="handleFetchData(currentPage + 1)"
-            :disabled="!nextURL || currentPage === page"
-        >
-          Вперед
+            :disabled="!nextURL || currentPage === page">Вперед
         </button>
       </div>
-
-
-
   <!-- Table -->
       <div class="main-window">
         <table class="table" id="Table">
@@ -83,7 +64,7 @@
               <th colspan="1"></th>
               <th colspan="1"></th>
               <th colspan="7"></th>
-              <th :colspan="namesWarehouses.length">Склады</th>
+              <th :colspan="namesWarehouses.length"><i class="pi pi-warehouse" style="margin-right: 5px;"></i>Склады</th>
               <th v-for="(shop, index) in filteredShops" :key="index" :colspan="fieldShops.length">{{ shop }}<br/><span class="small-data">{{ getStoreInfo(shop) }}</span></th>
             </tr>
             <tr>
