@@ -12,11 +12,14 @@
     border: 1px solid #ddd;
     position: absolute;
     width: 100%;
-    border-radius: 5px;
+    border-radius: 15px;
     max-height: 500px;
     box-shadow: 0 0 15px rgb(178, 184, 255);
     overflow-y: auto;
+    overflow-x: hidden;
     z-index: 10;
+    height: auto;
+
 
 }
 
@@ -37,7 +40,16 @@
 .dropdown-item:hover {
     background-color: #b8b8b8;
 }
-
+.searchShop{
+    width: 96%;
+    border-color: #656565;
+    font-size: 18px;
+    font-family:"Varela Round","Comfortaa Light" , Verdana, Geneva, Tahoma, sans-serif;
+    background-color: rgba(200, 200, 200, 0.24);
+    border-radius: 10px;
+    height: 30px;
+    margin-top: 5px;
+}
 .my-button-dropdown{
     width: 300px; /* Установка ширины кнопки */
     height: 30px; /* Установка высоты кнопки */
@@ -74,7 +86,7 @@
     font-family:"Varela Round","Comfortaa Light" , Verdana, Geneva, Tahoma, sans-serif;
     font-weight: bold;
     font-size: 18px;
-    background: rgb(255, 255, 255);
+    background: rgba(255, 255, 255, 0);
 
 }
 
@@ -87,7 +99,7 @@
     border: 1px solid #5872e8;
     background: #5872e8;
     text-align: center;
-    color: rgb(255, 255, 255);
+    color: rgba(255, 255, 255, 0);
     border-radius: 0 5px 5px 0;
     cursor: pointer;
     font-size: 20px;

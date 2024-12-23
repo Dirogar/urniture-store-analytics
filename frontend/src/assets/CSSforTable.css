@@ -23,16 +23,15 @@
 /* Стили для главного окна с таблицей */
 .main-window {
     background-color: #fff;
-    box-shadow: 0 0 15px rgb(13, 21, 80); /* Тень */
+    box-shadow: 0 0 1px rgb(0, 0, 0); /* Тень */
     border-radius: 20px;
-    margin-top: 45px;
+    margin-top:6%;
     overflow-y: auto;
     overflow-x: auto;/* Прокрутка только при необходимости */
-    width: 100%;
-    height: auto; /* Фиксированная высота для прокрутки */
-    position: relative; /* Для корректной работы position: sticky у дочерних элементов */
+    width: 99%;
+    height: 80%;; /* Фиксированная высота для прокрутки */ /* Для корректной работы position: sticky у дочерних элементов */
     z-index: 1;
-    max-height: 820px;
+    position: fixed;
 }
 .table {width: 100%;text-align: center;border-collapse: collapse;height: 100%;}
 
@@ -56,22 +55,25 @@ tr:nth-child(odd) {
 thead tr:first-child th {
     position: sticky;
     top: 0;
-    padding: 5px 5px 5px 5px;
+    margin:20px 20px 20px 20px; ;
     background-color: rgb(255, 255, 255);
     font-family:"Varela Round","Comfortaa Light" , Verdana, Geneva, Tahoma, sans-serif;
     font-size:150%;
+    padding-bottom: 20px;
 
 }
 /* Заголовки */
 thead tr:nth-child(2) th {
     position: sticky;
-    padding: 10px 10px 10px 10px;
-    top: 19.9%; /* Отступ совпадает с высотой первой строки */
+    margin-top: 100px;
+    padding: 5px 5px 5px 5px;
+    top: 20%; /* Отступ совпадает с высотой первой строки */
     background-color: #ffffff;
     font-family:"Varela Round","Comfortaa Light" , Verdana, Geneva, Tahoma, sans-serif;
     font-size: larger;
     white-space: nowrap;
     border: none;
+    cursor: pointer;
 }
 
 /* Фиксация первого столбца (по горизонтали и вертикали) */
@@ -91,7 +93,7 @@ table th:nth-child(2),
 table td:nth-child(2) {
     position: sticky;
     padding: 15px 15px 15px 15px;
-    left: 107px; /* Задаем смещение для второго столбца */
+    left: 6.2%; /* Задаем смещение для второго столбца */
     top: 0; /* Фиксируем заголовок второго столбца сверху при вертикальной прокрутке */
     background-color: #f4f4f4; /* Цвет фона второго столбца */
     z-index: 6; /* Немного ниже, чем первый столбец */

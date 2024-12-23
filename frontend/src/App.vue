@@ -1,10 +1,20 @@
 <template>
+
+
+    <!-- Показываем окно авторизации, если пользователь не авторизован -->
+    <login v-if="!isAuthenticated" @auth-success="handleAuthSuccess" />
+
+    <!-- Основной контент -->
+    <div v-else>
+
       <div v-if="isLoading" class="loading-overlay">
         <div class="loader"></div>
       </div>
+
       <div class="container_up">
         <div class="logo-container">
-        <img :src="logo" alt="Логотип Matrix" class="logo"/><span class="name-container">Matrix</span>
+          <span class="dateActive">Дата актуальности {{DateNow()}}</span>
+          <img :src="logo" alt="Логотип Matrix" class="logo"/><span class="name-container">Matrix</span>
           <button class="bottom-user"><i class="pi pi-user" style="color: black;"></i></button>
         </div>
 
@@ -14,11 +24,24 @@
             <i class="pi pi-shop" style="margin-right: 5px;"></i> Магазин
           </button>
             <div v-if="isOpen" class="dropdown-menu">
-              <div class="dropdown-item" v-for="(name, id) in storeNames" :key="id">
-                <input type="checkbox"
-                :value="name"
-                :id="id"
-                v-model="selectShop"/>
+              <input
+                  type="text"
+                  class="searchShop"
+                  placeholder="Поиск по Магазинам"
+                  v-model="searchShop"
+              />
+
+              <div
+                  class="dropdown-item"
+                  v-for="(name, id) in filteredStores"
+                  :key="id">
+
+                <input
+                    type="checkbox"
+                    :value="name"
+                    :id="id"
+                    v-model="selectShop"
+                />
                 <label>{{ name }}</label>
                 </div>
               </div>
@@ -31,7 +54,7 @@
               v-model="searchTerm"
               placeholder="Поиск по артикулу" />
           <button type="submit" class="searchButton" @click="handleFetchData(1)">
-            <i class="pi pi-search" style="color:white;"></i>
+            <i class="pi pi-search" style="color:white; "></i>
           </button>
           </div>
         </div>
@@ -121,10 +144,13 @@
           </tbody>
         </table>
       </div>
+      </div>
 </template>
 
 
 <script>
+import background from './components/background.jpg'
+import login from "@/Login.vue";
 import "primeicons/primeicons.css";
 import CommentButon from "@/CommentButon.vue";
 import logo from './logo.png';
@@ -132,11 +158,10 @@ import {ref} from "vue";
 import {fetchData} from "./FetchData.vue";
 import {fetchStores} from "./FetchStores.vue";
 import {fetchWarehouses} from "./FetchWarehouses.vue";
-import { sortData} from './SortScript.js';
-import {getShopField} from "./SortScript.js";
+import {getShopField, sortData} from './SortScript.js';
 
 export default {
-  components: {CommentButon},
+  components: {CommentButon,login},
   data() {
     return {
       isOpenFilter: false,
@@ -162,6 +187,9 @@ export default {
       totalItems: 0, // Общее количество товаров
       nextPageUrl: null, // URL для следующей страницы
       previousPageUrl: null, // URL для предыдущей страницы
+      searchShop: '',
+      isAuthenticated: false,
+
 
     };
   },
@@ -172,6 +200,14 @@ export default {
     sortedData() {
       // Используем функцию sortData
       return sortData(this.product2, this.currentSort, this.currentSortDir);
+    },
+    filteredStores() {
+      if (!this.searchShop.trim()) {
+        return this.storeNames;
+      }
+      return this.storeNames.filter((name) =>
+          name.toLowerCase().includes(this.searchShop.toLowerCase())
+      );
     },
   },
 
@@ -186,6 +222,10 @@ export default {
 
 
   methods: {
+    handleAuthSuccess(){
+      this.isAuthenticated = true;
+    },
+
     getShopField,
     sortByWarehouses(name) {
       this.sortBy(`warehouse:${name}`);
@@ -211,6 +251,7 @@ export default {
           const { stores, storeNames } = await fetchStores();
           this.stores = stores;
           this.storeNames = storeNames;
+          console.log("market",this.storeNames)
         } catch (error) {
           console.error("Ошибка при загрузке магазинов:", error);
         }
@@ -220,6 +261,7 @@ export default {
       try {
         this.isLoading = true;
         this.currentPage = page;
+        console.log("page",page)
         const data = await fetchData(this.searchTerm, this.currentPage);
         this.product2 = data.products;
         this.totalItems = data.totalItems;
@@ -242,7 +284,6 @@ export default {
         console.log("Ошибка при загрузке данных:", error``)
       }
     },
-
     //Выподающий список для выбора магазина
     toggleDropdown() {
       this.isOpen = !this.isOpen;
@@ -286,6 +327,9 @@ export default {
       this.editShop = null;
       this.editedValue = '';
     },
+    DateNow() {
+      return new Date().toISOString().slice(0, 10);
+    }
 
   }
 };
