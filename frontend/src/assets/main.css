@@ -63,12 +63,12 @@ body {
 /* Стили для контейнера в самом верху{*/
 .container_up {
     height: 40px; /*Толщина*/
-    width: 99%; /* Устанавливаем ширину на 100% */
+    width: 100%; /* Устанавливаем ширину на 100% */
     background: rgb(255, 255, 255); /* Цвет фона для визуализации */
     box-shadow: 0 0 1px rgb(0, 0, 0); /* Тень */
     padding: 0;
     border-radius: 20px;
-    position: fixed;
+    position: absolute;
 
 }
 

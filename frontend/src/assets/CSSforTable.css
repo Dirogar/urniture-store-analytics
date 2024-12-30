@@ -17,7 +17,6 @@
     display: block;
     word-break: normal;
     white-space:pre-line;
-
 }
 
 /* Стили для главного окна с таблицей */
@@ -29,11 +28,10 @@
     overflow-y: auto;
     overflow-x: auto;/* Прокрутка только при необходимости */
     width: 99%;
-    height: 88%;; /* Фиксированная высота для прокрутки */ /* Для корректной работы position: sticky у дочерних элементов */
-    z-index: 1;
+    height: 88%; /* Фиксированная высота для прокрутки */ /* Для корректной работы position: sticky у дочерних элементов */
     position: fixed;
 }
-.table {width: 100%;text-align: center;border-collapse: collapse;height: 100%;}
+table {width: 50%;text-align: center;border-collapse: collapse;height: 50%;}
 
 .table th, .table td {
     border: none!important;

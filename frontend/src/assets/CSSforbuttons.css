@@ -1,16 +1,13 @@
 
 .dropdown {
     position: absolute;
-    display: inline-block;
     z-index: 2;
     left: 60%;
-    top: 5px;
-}
+    top: 5px;}
 
 .dropdown-menu {
     background-color: #f8f3f3;
     border: 1px solid #ddd;
-    position: absolute;
     width: 100%;
     border-radius: 15px;
     max-height: 500px;
@@ -18,28 +15,22 @@
     overflow-y: auto;
     overflow-x: hidden;
     z-index: 10;
-    height: auto;
-
-
-}
+    height: auto;}
 
 .dropdown-item {
     padding: 8px 16px;
-    text-decoration: none;
     color: #131313;
     display: block;
     font-family:"Varela Round","Comfortaa Light" , Verdana, Geneva, Tahoma, sans-serif;
     font-size:20px;
-    white-space: nowrap;
     font-weight:bold;
-    z-index: 10;
     background-color: white;
     border-radius: 10px;
+    z-index: 1000;}
 
-}
 .dropdown-item:hover {
-    background-color: #b8b8b8;
-}
+    background-color: #b8b8b8;}
+
 .searchShop{
     width: 96%;
     border-color: #656565;
@@ -50,20 +41,17 @@
     height: 30px;
     margin-top: 5px;
 }
-.my-button-dropdown{
+.my-button-dropdown {
     width: 300px; /* Установка ширины кнопки */
     height: 30px; /* Установка высоты кнопки */
     font-size: 18px; /* Увеличение размера шрифта */
     padding: 2px 10px; /* Установка внутренних отступов */
-    background-color: rgba(0, 123, 255, 0); /* Цвет фона */
-    color: #221919; /* Цвет текста */
+    background-color: rgba(72, 75, 78, 0); /* Цвет фона */
+    color: #070707; /* Цвет текста */
     border-radius: 5px; /* Скругление углов */
     cursor: pointer; /* Указатель при наведении */
     border: #9c9999 1px solid;
-    font-family:"Varela Round","Comfortaa Light" , Verdana, Geneva, Tahoma, sans-serif;
-    left :80%;
 }
-
 .my-button-dropdown:hover{
     background-color: #9c9999;
     color: white;
