@@ -26,7 +26,7 @@ body {
 /*css для кнопок пагинации*/
 .pagination{
     position: fixed;
-    top: 93%;
+    top: 94%;
     right: 15%;
     margin-top: 1%;
 }

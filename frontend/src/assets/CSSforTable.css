@@ -25,11 +25,11 @@
     background-color: #fff;
     box-shadow: 0 0 1px rgb(0, 0, 0); /* Тень */
     border-radius: 20px;
-    margin-top:6%;
+    margin-top:3%;
     overflow-y: auto;
     overflow-x: auto;/* Прокрутка только при необходимости */
     width: 99%;
-    height: 80%;; /* Фиксированная высота для прокрутки */ /* Для корректной работы position: sticky у дочерних элементов */
+    height: 88%;; /* Фиксированная высота для прокрутки */ /* Для корректной работы position: sticky у дочерних элементов */
     z-index: 1;
     position: fixed;
 }
